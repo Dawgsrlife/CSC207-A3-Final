@@ -2,19 +2,20 @@
 # Group Member: FILL THIS IN
 
 Nov 16, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Assignment not yet released.
+	Today     : Assignment not yet released.
+	Obstacles : Assignment not yet released.
 
 Nov 17, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Assignment not yet released.
+	Today     : Assignment not yet released.
+	Obstacles : Assignment not yet released.
 
 Nov 18, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Assignment not yet released.
+	Today     : Clone assignment project. Look through assignment code.
+	Obstacles : Understanding new code that has just been provided,
+	            including the relationships between classes and how they interact with one another.
 
 Nov 19, 2024
 	Yesterday :
