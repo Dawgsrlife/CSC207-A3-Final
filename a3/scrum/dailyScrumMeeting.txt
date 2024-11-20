@@ -18,9 +18,9 @@ Nov 18, 2024
 	            including the relationships between classes and how they interact with one another.
 
 Nov 19, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Looked through code to understand what is happening between the classes.
+	Today     : Look through assignment instructions; complete CSC236 take-home midterm.
+	Obstacles : Getting used to unfamiliar code and Part 1 instructions.
 
 Nov 20, 2024
 	Yesterday :
