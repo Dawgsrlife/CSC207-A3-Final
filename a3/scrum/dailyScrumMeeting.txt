@@ -28,9 +28,11 @@ Nov 20, 2024
 	Obstacles : Remembering how to work with the particular architecture for strategy and command.
 
 Nov 21, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Complete lab for this assignment which familiarizes me with the architecture.
+	Today     : Work on CSC236 homework and attend Professor Arnold's office
+            	hours.
+	Obstacles : Implementing the visitor pattern to make code more easily
+	            extendable.
 
 Nov 22, 2024
 	Yesterday :

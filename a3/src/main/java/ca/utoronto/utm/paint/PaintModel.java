@@ -30,6 +30,7 @@ public class PaintModel extends Observable implements Observer {
 	
 	private ArrayList<PaintCommand> commands = new ArrayList<PaintCommand>();
 
+
 	public void executeAll(GraphicsContext g) {
 		for(PaintCommand c: this.commands){
 			c.execute(g);
