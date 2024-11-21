@@ -23,9 +23,9 @@ Nov 19, 2024
 	Obstacles : Getting used to unfamiliar code and Part 1 instructions.
 
 Nov 20, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Look through assignment instructions; complete CSC236 take-home midterm.
+	Today     : Complete lab for this assignment which familiarizes me with the architecture.
+	Obstacles : Remembering how to work with the particular architecture for strategy and command.
 
 Nov 21, 2024
 	Yesterday :
