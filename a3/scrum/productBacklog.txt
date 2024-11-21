@@ -17,7 +17,7 @@ OWNER    :
 PRIORITY : 1
 ESTIMATE : (1 hour, 2 hours, 4 hours, 1 day, 2 days, 4 days)    ACTUAL :  
 AS A     : user
-ISSUE    : A button which allows me to draw a polygon. Once selected,
+ISSUE    : A button which allows me to draw a polyline. Once selected,
 a left click on the canvas places the first polyline point.
 Each subsequent left click on the canvas
 adds a line segment to the polyline. A final right click ends the polyline.
