@@ -35,9 +35,11 @@ Nov 21, 2024
 	            extendable.
 
 Nov 22, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Work on CSC236 homework and attend Professor Arnold's office
+	            hours.
+	Today     : Work on CSC236 homework, refresh on assignment code
+	            architecture.
+	Obstacles : CSC236 homework.
 	
 Nov 23, 2024
 	Yesterday :
