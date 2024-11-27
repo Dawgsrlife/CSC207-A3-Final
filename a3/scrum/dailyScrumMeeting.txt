@@ -57,9 +57,9 @@ Nov 25, 2024
 	Obstacles : CSC236 A3 homework.
 
 Nov 26, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Work on CSC236 A3 homework.
+	Today     : Attend lecture review CSC207 material.
+	Obstacles : Implementing vistor pattern.
 	
 Nov 27, 2024
 	Yesterday :
