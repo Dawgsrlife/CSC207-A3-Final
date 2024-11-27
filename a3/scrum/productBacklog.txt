@@ -2,20 +2,20 @@
 # If a USER STORY is large, break it into smaller user stories.
 
 --------------------------------------------------------------------------
-TYPE     : BUG 3.0 : UTORID : STATUS : NotStarted (NotStarted,InProgress, Incomplete,Complete)
+TYPE     : BUG 3.0 : mengale1 : STATUS : InProgress
 NAME     : Configure and use system
-OWNER    : 
-PRIORITY : (1,2,3)
-ESTIMATE : (1 hour, 2 hours, 4 hours, 1 day, 2 days, 4 days)    ACTUAL :  
-ISSUE    : 
+OWNER    : mengale1
+PRIORITY : 3
+ESTIMATE : 1 hour    ACTUAL :
+ISSUE    : None.
 - demonstrates that they can run Paint on their dev platform
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.1 : UTORID : STATUS : NotStarted (NotStarted,InProgress, Incomplete,Complete)
+TYPE     : USER STORY 3.1 : mengale1 : STATUS : NotStarted
 NAME     : Polyline
-OWNER    :
+OWNER    : mengale1
 PRIORITY : 1
-ESTIMATE : (1 hour, 2 hours, 4 hours, 1 day, 2 days, 4 days)    ACTUAL :  
+ESTIMATE : 1 hour    ACTUAL :
 AS A     : user
 ISSUE    : A button which allows me to draw a polyline. Once selected,
 a left click on the canvas places the first polyline point.
@@ -29,11 +29,11 @@ See squiggle for example. There is no mouse drag for polyline.
 
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.2 : UTORID : STATUS : NotStarted (NotStarted,InProgress, Incomplete,Complete)
+TYPE     : USER STORY 3.2 : mengale1 : STATUS : NotStarted
 NAME     : Save
-OWNER    :
+OWNER    : mengale1
 PRIORITY : 1
-ESTIMATE : (1 hour, 2 hours, 4 hours, 1 day, 2 days, 4 days)    ACTUAL :  
+ESTIMATE : 1 hour    ACTUAL :
 AS A     : user
 ISSUE    : a user interface that allows me to specify where to save the
 Paint, then saves all Paint commands to a file.
@@ -46,11 +46,11 @@ You can find the format of the save file in the
 project under paintSaveFileFormat.txt.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.3 : UTORID : STATUS : NotStarted (NotStarted,InProgress, Incomplete,Complete)
+TYPE     : USER STORY 3.3 : mengale1 : STATUS : NotStarted
 NAME     : Load
-OWNER    :
+OWNER    : mengale1
 PRIORITY : 2
-ESTIMATE : (1 hour, 2 hours, 4 hours, 1 day, 2 days, 4 days)    ACTUAL :  
+ESTIMATE : 2 hours    ACTUAL :
 AS A     : user
 ISSUE    : the ability to open previously saved Paint programs. A file dialog
 should appear, allowing me to choose the file to load. If the file is not in
@@ -68,11 +68,11 @@ For example, you will have to walk
 through a squiggle to properly parse it using Patterns and groups.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : BUG 3.4: UTORID : STATUS : NotStarted (NotStarted,InProgress, Incomplete,Complete)
+TYPE     : BUG 3.4: mengale1 : STATUS : NotStarted
 NAME     : Visitor1: Improve architecture for drawing
-OWNER    :
+OWNER    : mengale1
 PRIORITY : 3
-ESTIMATE : (1 hour, 2 hours, 4 hours, 1 day, 2 days, 4 days)    ACTUAL :  
+ESTIMATE : 3 hours    ACTUAL :
 AS A     : 
 ISSUE    :
 DEPENDSON: 
@@ -85,11 +85,11 @@ visit the PaintModel and render the screen using
 a graphics context. Some Model methods may be removed after this.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : BUG 3.5: UTORID : STATUS : NotStarted (NotStarted,InProgress, Incomplete,Complete)
+TYPE     : BUG 3.5: mengale1 : STATUS : NotStarted
 NAME     : Visitor2: Improve architecture for save
-OWNER    :
+OWNER    : mengale1
 PRIORITY : 4
-ESTIMATE : (1 hour, 2 hours, 4 hours, 1 day, 2 days, 4 days)    ACTUAL :  
+ESTIMATE : 3 hours    ACTUAL :
 AS A     : 
 ISSUE    :
 DEPENDSON: USER STORY 3.2 and USER STORY 3.4
