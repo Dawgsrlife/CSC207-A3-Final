@@ -11,11 +11,11 @@ ISSUE    : None.
 - demonstrates that they can run Paint on their dev platform
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.1 : mengale1 : STATUS : InProgress
+TYPE     : USER STORY 3.1 : mengale1 : STATUS : Complete
 NAME     : Polyline
 OWNER    : mengale1
 PRIORITY : 1
-ESTIMATE : 1 hour    ACTUAL :
+ESTIMATE : 1 hour    ACTUAL : 20 minutes
 AS A     : user
 ISSUE    : A button which allows me to draw a polyline. Once selected,
 a left click on the canvas places the first polyline point.
@@ -26,7 +26,6 @@ the canvas, the current potential next line segment is on display.
 
 IMPL DTL : Implementation details for polyline
 See squiggle for example. There is no mouse drag for polyline.
-
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
 TYPE     : USER STORY 3.2 : mengale1 : STATUS : NotStarted
