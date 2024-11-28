@@ -2,11 +2,11 @@
 # If a USER STORY is large, break it into smaller user stories.
 
 --------------------------------------------------------------------------
-TYPE     : BUG 3.0 : mengale1 : STATUS : InProgress
-NAME     : Configure and use system
+TYPE     : BUG 3.0 : mengale1 : STATUS : Complete
+NAME     : Configure and use system (reformat code to look pretty)
 OWNER    : mengale1
 PRIORITY : 3
-ESTIMATE : 1 hour    ACTUAL :
+ESTIMATE : 1 hour    ACTUAL : 5 minutes
 ISSUE    : None.
 - demonstrates that they can run Paint on their dev platform
 --------------------------------------------------------------------------
