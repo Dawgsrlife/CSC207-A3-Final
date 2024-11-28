@@ -9,6 +9,8 @@ public class ShapeManipulatorFactory {
             strategy = new SquiggleManipulatorStrategy(paintModel);
         } else if (strategyName == "Rectangle") {
             strategy = new RectangleManipulatorStrategy(paintModel);
+        } else if (strategyName == "Polyline") {
+            strategy = new PolylineManipulatorStrategy(paintModel);
         }
         return strategy;
     }

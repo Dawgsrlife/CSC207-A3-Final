@@ -19,4 +19,12 @@ class SquiggleManipulatorStrategy extends ShapeManipulatorStrategy {
         this.squiggleCommand = new SquiggleCommand();
         this.addCommand(squiggleCommand);
     }
+
+    protected SquiggleCommand getSquiggleCommand() {
+        return squiggleCommand;
+    }
+
+    protected void setSquiggleCommand(SquiggleCommand squiggleCommand) {
+        this.squiggleCommand = squiggleCommand;
+    }
 }
