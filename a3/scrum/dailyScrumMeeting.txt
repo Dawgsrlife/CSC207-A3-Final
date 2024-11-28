@@ -62,9 +62,9 @@ Nov 26, 2024
 	Obstacles : Implementing visitor pattern.
 	
 Nov 27, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Attend lecture review CSC207 material.
+	Today     : Complete BUG3.0.
+	Obstacles : Getting used to actually working with the architecture.
 	
 Nov 28, 2024
 	Yesterday :
