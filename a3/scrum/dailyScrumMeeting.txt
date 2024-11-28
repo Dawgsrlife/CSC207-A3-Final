@@ -67,9 +67,9 @@ Nov 27, 2024
 	Obstacles : Getting used to actually working with the architecture.
 	
 Nov 28, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Complete BUG3.0.
+	Today     : Complete US3.1.
+	Obstacles : Getting used to what goes where in the architecture.
 	
 Nov 29, 2024
 	Yesterday :

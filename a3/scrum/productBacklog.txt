@@ -28,7 +28,7 @@ IMPL DTL : Implementation details for polyline
 See squiggle for example. There is no mouse drag for polyline.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.2 : mengale1 : STATUS : NotStarted
+TYPE     : USER STORY 3.2 : mengale1 : STATUS : InProgress
 NAME     : Save
 OWNER    : mengale1
 PRIORITY : 1
