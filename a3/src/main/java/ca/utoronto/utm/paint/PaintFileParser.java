@@ -106,6 +106,7 @@ public class PaintFileParser {
         CircleCommand circleCommand = null;
         RectangleCommand rectangleCommand = null;
         SquiggleCommand squiggleCommand = null;
+        PolylineCommand polylineCommand = null;
 
         try {
             int state = 0;

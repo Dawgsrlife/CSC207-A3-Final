@@ -17,7 +17,6 @@ public class SquiggleCommand extends PaintCommand {
         return this.points;
     }
 
-
     @Override
     public void execute(GraphicsContext g) {
         ArrayList<Point> points = this.getPoints();
@@ -27,6 +26,5 @@ public class SquiggleCommand extends PaintCommand {
             Point p2 = points.get(i + 1);
             g.strokeLine(p1.x, p1.y, p2.x, p2.y);
         }
-
     }
 }

@@ -11,7 +11,7 @@ ISSUE    : None.
 - demonstrates that they can run Paint on their dev platform
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.1 : mengale1 : STATUS : NotStarted
+TYPE     : USER STORY 3.1 : mengale1 : STATUS : InProgress
 NAME     : Polyline
 OWNER    : mengale1
 PRIORITY : 1
