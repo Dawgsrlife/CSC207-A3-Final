@@ -2,7 +2,7 @@ package ca.utoronto.utm.paint;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class CircleCommand extends PaintCommand implements PaintSaveFileSavable {
+public class CircleCommand extends PaintCommand {
     private Point centre;
     private int radius;
 

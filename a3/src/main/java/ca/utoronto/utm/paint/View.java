@@ -148,6 +148,11 @@ public class View implements EventHandler<ActionEvent> {
             }
         } else if (command.equals("Save")) {
             FileChooser fc = new FileChooser();
+
+            // Set the title and initial directory:
+            fc.setTitle("Save Paint File");
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Files (*.a3p)", "*.a3p"));
+
             File file = fc.showSaveDialog(this.stage);
 
             if (file != null) {

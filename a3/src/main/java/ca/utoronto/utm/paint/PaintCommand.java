@@ -41,7 +41,7 @@ public abstract class PaintCommand extends Observable implements PaintSaveFileSa
         double b = this.color.getBlue();
 
         String s = "";
-        s += "\tcolor:" + r + "," + g + "," + b + "\n";
+        s += "\tcolor:" + (int) Math.round(r * 255) + "," + (int) Math.round(g * 255) + "," + (int) Math.round(b * 255) + "\n";
         s += "\tfilled:" + this.fill + "\n";
         return s;
     }
