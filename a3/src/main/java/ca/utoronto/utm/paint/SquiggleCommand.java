@@ -27,4 +27,29 @@ public class SquiggleCommand extends PaintCommand {
             g.strokeLine(p1.x, p1.y, p2.x, p2.y);
         }
     }
+
+    /**
+     * @return
+     */
+    @Override
+    public String getPaintSaveFileString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Squiggle\n");
+
+        // Grab common details from PaintCommand:
+        String details = super.getPaintSaveFileString();
+        int startIndex = details.indexOf("color:");
+        details = details.substring(startIndex);
+        sb.append(details);
+
+        sb.append("\tpoints:\n");
+        for (Point point : points) {
+            sb.append("\t\tpoint:(").append(point.x).append(",").append(point.y).append(")\n");
+        }
+        sb.append("\tend points\n");
+        sb.append("End Squiggle\n");
+
+        return sb.toString();
+    }
 }

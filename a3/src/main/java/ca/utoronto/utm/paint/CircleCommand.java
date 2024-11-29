@@ -2,7 +2,7 @@ package ca.utoronto.utm.paint;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class CircleCommand extends PaintCommand {
+public class CircleCommand extends PaintCommand implements PaintSaveFileSavable {
     private Point centre;
     private int radius;
 
@@ -42,5 +42,24 @@ public class CircleCommand extends PaintCommand {
             g.setStroke(this.getColor());
             g.strokeOval(x - radius, y - radius, 2 * radius, 2 * radius);
         }
+    }
+
+    @Override
+    public String getPaintSaveFileString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Circle\n");
+
+        // Reuse common instructions:
+        String details = super.getPaintSaveFileString();
+        int startIndex = details.indexOf("color:");
+        details = details.substring(startIndex);
+        sb.append(details);
+
+        sb.append("\tcenter:(").append(getCentre().x).append(",").append(getCentre().y).append(")\n");
+        sb.append("\tradius:").append(radius).append("\n");
+        sb.append("EndCircle\n");
+
+        return sb.toString();
     }
 }

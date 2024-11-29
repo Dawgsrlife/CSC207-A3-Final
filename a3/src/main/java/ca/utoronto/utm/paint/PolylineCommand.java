@@ -22,4 +22,25 @@ public class PolylineCommand extends SquiggleCommand {
             g.strokeLine(lastPoint.x, lastPoint.y, previewPoint.x, previewPoint.y);
         }
     }
+
+    /**
+     * @return
+     */
+    @Override
+    public String getPaintSaveFileString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Polyline\n");
+
+        // Avoid rewriting the details by calling super's (SquiggleCommand's) method
+        String details = getPaintSaveFileString();
+        int startIndex = details.indexOf("Squiggle\n") + "Squiggle\n".length();
+        int endIndex = details.indexOf("End Squiggle\n");
+        details = details.substring(startIndex, endIndex);
+        sb.append(details);
+
+        sb.append("End Polyline\n");
+
+        return sb.toString();
+    }
 }

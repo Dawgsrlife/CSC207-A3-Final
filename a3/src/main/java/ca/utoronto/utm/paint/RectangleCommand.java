@@ -58,4 +58,26 @@ public class RectangleCommand extends PaintCommand {
             g.strokeRect(topLeft.x, topLeft.y, dimensions.x, dimensions.y);
         }
     }
+
+    /**
+     * @return
+     */
+    @Override
+    public String getPaintSaveFileString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Rectangle\n");
+
+        // Reuse common details in PaintCommand:
+        String details = super.getPaintSaveFileString();
+        int startIndex  = details.indexOf("color:");
+        details = details.substring (startIndex);
+        sb.append(details);
+
+        sb.append("\tp1:").append(this.getP1().x).append(",").append(this.getP1().y).append("\n");
+        sb.append("\tp2:").append(this.getP2().x).append(",").append(this.getP2().y).append("\n");
+        sb.append("End Rectangle\n");
+
+        return sb.toString();
+    }
 }
