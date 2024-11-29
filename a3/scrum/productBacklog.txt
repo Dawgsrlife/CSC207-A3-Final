@@ -45,7 +45,7 @@ You can find the format of the save file in the
 project under paintSaveFileFormat.txt.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.3 : mengale1 : STATUS : NotStarted
+TYPE     : USER STORY 3.3 : mengale1 : STATUS : InProgress
 NAME     : Load
 OWNER    : mengale1
 PRIORITY : 2
