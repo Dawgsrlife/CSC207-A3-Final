@@ -28,11 +28,11 @@ IMPL DTL : Implementation details for polyline
 See squiggle for example. There is no mouse drag for polyline.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.2 : mengale1 : STATUS : InProgress
+TYPE     : USER STORY 3.2 : mengale1 : STATUS : Complete
 NAME     : Save
 OWNER    : mengale1
 PRIORITY : 1
-ESTIMATE : 1 hour    ACTUAL :
+ESTIMATE : 1 hour    ACTUAL : 2 hours
 AS A     : user
 ISSUE    : a user interface that allows me to specify where to save the
 Paint, then saves all Paint commands to a file.

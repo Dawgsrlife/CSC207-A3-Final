@@ -72,9 +72,9 @@ Nov 28, 2024
 	Obstacles : Getting used to what goes where in the architecture.
 	
 Nov 29, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Complete BUG3.0.
+	Today     : Complete US3.1.
+	Obstacles : Writing clean, optimized code for the interface method.
 
 Nov 30, 2024
 	Yesterday :
