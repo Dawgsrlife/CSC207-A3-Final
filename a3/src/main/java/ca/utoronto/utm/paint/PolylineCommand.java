@@ -33,7 +33,7 @@ public class PolylineCommand extends SquiggleCommand {
         sb.append("Polyline\n");
 
         // Avoid rewriting the details by calling super's (SquiggleCommand's) method
-        String details = getPaintSaveFileString();
+        String details = super.getPaintSaveFileString();
         int startIndex = details.indexOf("Squiggle\n") + "Squiggle\n".length();
         int endIndex = details.indexOf("End Squiggle\n");
         details = details.substring(startIndex, endIndex);

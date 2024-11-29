@@ -2,6 +2,7 @@ package ca.utoronto.utm.paint;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import javafx.application.Platform;
@@ -151,10 +152,19 @@ public class View implements EventHandler<ActionEvent> {
 
             if (file != null) {
                 // This is where a real application would open the file.
-                System.out.println("Saving: " + file.getName() + "." + "\n");
-                // Add something like the following...
-                // PrintWriter writer = new PrintWriter(file);
-                // View.save(writer, this.paintModel);
+
+                PrintWriter writer = null;
+                try {
+                    System.out.println("Saving: " + file.getName() + "." + "\n");
+                    writer = new PrintWriter(file);
+                    View.save(writer, this.paintModel);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    if (writer != null) {
+                        writer.close();
+                    }
+                }
             } else {
                 System.out.println("Save command cancelled by user." + "\n");
             }
@@ -173,6 +183,9 @@ public class View implements EventHandler<ActionEvent> {
      * @param paintModel
      */
     public static void save(PrintWriter writer, PaintModel paintModel) {
-
+        writer.println("Paint Save File Version 1.0");
+        paintModel.save(writer);
+        writer.println("End Paint Save File");
+        writer.close();
     }
 }
