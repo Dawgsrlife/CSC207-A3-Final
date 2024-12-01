@@ -1,5 +1,7 @@
 package ca.utoronto.utm.paint;
 
+import javafx.scene.paint.Color;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -160,24 +162,28 @@ public class PaintFileParser {
                         m = pCircleStart.matcher(l);
                         if (m.matches()) {
                             // Circle Start
+                            circleCommand = new CircleCommand(null, 0);
                             state = 2;
                             break;
                         }
                         m = pRectangleStart.matcher(l);
                         if (m.matches()) {
                             // Rectangle Start
+                            rectangleCommand = new RectangleCommand(null, null);
                             state = 7;
                             break;
                         }
                         m = pSquiggleStart.matcher(l);
                         if (m.matches()) {
                             // Squiggle Start
+                            squiggleCommand = new SquiggleCommand();
                             state = 12;
                             break;
                         }
                         m = pPolylineStart.matcher(l);
                         if (m.matches()) {
                             // Polyline Start
+                            polylineCommand = new PolylineCommand();
                             state = 17;
                             break;
                         }
@@ -193,6 +199,11 @@ public class PaintFileParser {
                         // Start Parsing Circle: looking for color
                         m = pColor.matcher(l);
                         if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            circleCommand.setColor(Color.rgb(r, g, b));
                             state = 3;
                             break;
                         }
@@ -200,6 +211,7 @@ public class PaintFileParser {
                         return false;
                     case 3:
                         // Parsing Circle: looking for filled
+
                         m = pFilled.matcher(l);
                         if (m.matches()) {
                             state = 4;
