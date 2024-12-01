@@ -152,7 +152,7 @@ public class View implements EventHandler<ActionEvent> {
                         System.out.println("Error while loading file: " + parser.getErrorMessage());
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("Parsing issue (invalid file).");
                 }
             } else {
                 System.out.println("Open command cancelled by user." + "\n");
