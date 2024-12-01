@@ -50,7 +50,7 @@ public class PaintFileParser {
     // Shared for Squiggle and Polyline:
     private Pattern pPointsBegin = Pattern.compile("^points$");
     private Pattern pPoint = Pattern.compile("^point:" + coordinate + "$");
-    private Pattern pPointsEnd = Pattern.compile("^end points$");
+    private Pattern pPointsEnd = Pattern.compile("^endpoints$");
 
     // Squiggle Block:
     private Pattern pSquiggleStart = Pattern.compile("^Squiggle$");
@@ -143,6 +143,8 @@ public class PaintFileParser {
 
             this.lineNumber = 0;
             while ((l = inputStream.readLine()) != null) {
+                if (l.isEmpty()) continue;
+                l = l.replaceAll("\\s+", "");
                 this.lineNumber++;
                 System.out.println(lineNumber + " " + l + " " + state);
                 switch (state) {
