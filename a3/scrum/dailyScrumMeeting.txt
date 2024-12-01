@@ -73,13 +73,13 @@ Nov 28, 2024
 	
 Nov 29, 2024
 	Yesterday : Complete BUG3.0.
-	Today     : Complete US3.1.
+	Today     : Complete US3.1 and US3.2.
 	Obstacles : Writing clean, optimized code for the interface method.
 
 Nov 30, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Complete US3.1 and US3.2.
+	Today     : Progress on US3.3.
+	Obstacles : Git branch organization; figuring out the state machines for parsing strings of a desired format.
 
 Dec 1, 2024
 	Yesterday :
