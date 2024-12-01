@@ -194,11 +194,6 @@ public class PaintFileParser {
                             state = 3;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Circle color");
                         return false;
                     case 3:
@@ -207,11 +202,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 4;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected Circle filled");
                         return false;
@@ -222,11 +212,6 @@ public class PaintFileParser {
                             state = 5;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Circle center");
                         return false;
                     case 5:
@@ -235,11 +220,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 6;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected Circle Radius");
                         return false;
@@ -250,11 +230,6 @@ public class PaintFileParser {
                             state = 1;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected End Circle");
                         return false;
                     case 7:
@@ -263,11 +238,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 8;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected Rectangle color");
                         return false;
@@ -278,11 +248,6 @@ public class PaintFileParser {
                             state = 9;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Rectangle filled");
                         return false;
                     case 9:
@@ -291,11 +256,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 10;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected Rectangle p1");
                         return false;
@@ -306,11 +266,6 @@ public class PaintFileParser {
                             state = 11;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Rectangle p2");
                         return false;
                     case 11:
@@ -319,11 +274,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 1;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected End Rectangle");
                         return false;
@@ -334,11 +284,6 @@ public class PaintFileParser {
                             state = 13;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Squiggle color");
                     case 13:
                         // Parsing Squiggle: looking for filled
@@ -346,11 +291,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 14;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected Squiggle filled");
                         return false;
@@ -360,11 +300,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 15;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected Squiggle points");
                         return false;
@@ -379,11 +314,6 @@ public class PaintFileParser {
                             state = 16;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Squiggle point or end points");
                         return false;
                     case 16:
@@ -392,11 +322,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 1;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected End Squiggle");
                         return false;
@@ -407,11 +332,6 @@ public class PaintFileParser {
                             state = 18;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Polyline color");
                         return false;
                     case 18:
@@ -421,11 +341,6 @@ public class PaintFileParser {
                             state = 19;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Polyline filled");
                         return false;
                     case 19:
@@ -434,11 +349,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 20;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected Polyline points");
                         return false;
@@ -453,11 +363,6 @@ public class PaintFileParser {
                             state = 21;
                             break;
                         }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
-                        }
                         error("Expected Polyline point or end points");
                         return false;
                     case 21:
@@ -466,11 +371,6 @@ public class PaintFileParser {
                         if (m.matches()) {
                             state = 1;
                             break;
-                        }
-                        m = pFileEnd.matcher(l);
-                        if (m.matches()) {
-                            error("Unexpected end of file");
-                            return false;
                         }
                         error("Expected End Polyline");
                         return false;
@@ -513,7 +413,10 @@ public class PaintFileParser {
                      */
                 }
             }
-            return (state == 22);
+            if (state != 22) {
+                error("Unexpected end of file");
+                return false;
+            }
         } catch (Exception e) {
 
         }
