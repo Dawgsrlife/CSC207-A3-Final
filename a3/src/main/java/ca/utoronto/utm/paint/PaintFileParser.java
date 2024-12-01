@@ -25,12 +25,40 @@ public class PaintFileParser {
     /**
      * Below are Patterns used in parsing
      */
+    // File Start and End:
     private Pattern pFileStart = Pattern.compile("^PaintSaveFileVersion1.0$");
     private Pattern pFileEnd = Pattern.compile("^EndPaintSaveFile$");
 
+    // Shared Details:
+    private String colorNum = "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])";
+    private String coordinate = "\\((-?\\d+),(-?\\d+)\\)";
+    private Pattern pColor = Pattern.compile("^color:" + colorNum + "," + colorNum + "," + colorNum + "$");
+    private Pattern pFilled = Pattern.compile("^filled:(true|false)$");
+
+    // Circle Block:
     private Pattern pCircleStart = Pattern.compile("^Circle$");
     private Pattern pCircleEnd = Pattern.compile("^EndCircle$");
-    // ADD MORE!!
+    private Pattern pCenter = Pattern.compile("^center:" + coordinate + "$");
+    private Pattern pRadius = Pattern.compile("^radius:(\\d+)$");
+
+    // Rectangle Block:
+    private Pattern pRectangleStart = Pattern.compile("^Rectangle$");
+    private Pattern pRectangleEnd = Pattern.compile("^EndRectangle$");
+    private Pattern pP1 = Pattern.compile("^p1:" + coordinate + "$");
+    private Pattern pP2 = Pattern.compile("^p2:" + coordinate + "$");
+
+    // Shared for Squiggle and Polyline:
+    private Pattern pPointsBegin = Pattern.compile("^points$");
+    private Pattern pPoint = Pattern.compile("^point:" + coordinate + "$");
+    private Pattern pPointsEnd = Pattern.compile("^end points$");
+
+    // Squiggle Block:
+    private Pattern pSquiggleStart = Pattern.compile("^Squiggle$");
+    private Pattern pSquiggleEnd = Pattern.compile("^EndSquiggle$");
+
+    // Polyline Block:
+    private Pattern pPolylineStart = Pattern.compile("^Polyline$");
+    private Pattern pPolylineEnd = Pattern.compile("^EndPolyline$");
 
     /**
      * Store an appropriate error message in this, including
