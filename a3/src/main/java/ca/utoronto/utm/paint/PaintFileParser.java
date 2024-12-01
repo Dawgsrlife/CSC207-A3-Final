@@ -64,10 +64,10 @@ public class PaintFileParser {
      * Store an appropriate error message in this, including
      * lineNumber where the error occurred.
      *
-     * @param mesg
+     * @param msg
      */
-    private void error(String mesg) {
-        this.errorMessage = "Error in line " + lineNumber + " " + mesg;
+    private void error(String msg) {
+        this.errorMessage = "Error in line " + lineNumber + " " + msg;
     }
 
     /**
@@ -146,7 +146,7 @@ public class PaintFileParser {
                 this.lineNumber++;
                 System.out.println(lineNumber + " " + l + " " + state);
                 switch (state) {
-                    case 0:
+                    case 0:  // Initial State: looking for file start
                         m = pFileStart.matcher(l);
                         if (m.matches()) {
                             state = 1;
@@ -154,21 +154,331 @@ public class PaintFileParser {
                         }
                         error("Expected Start of Paint Save File");
                         return false;
-                    case 1: // Looking for the start of a new object or end of the save file
+                    case 1:  // Standby State: Looking for the start of a new object or end of the save file
                         m = pCircleStart.matcher(l);
                         if (m.matches()) {
-                            // ADD CODE!!!
+                            // Circle Start
                             state = 2;
                             break;
                         }
-                        // ADD CODE
-
+                        m = pRectangleStart.matcher(l);
+                        if (m.matches()) {
+                            // Rectangle Start
+                            state = 7;
+                            break;
+                        }
+                        m = pSquiggleStart.matcher(l);
+                        if (m.matches()) {
+                            // Squiggle Start
+                            state = 12;
+                            break;
+                        }
+                        m = pPolylineStart.matcher(l);
+                        if (m.matches()) {
+                            // Polyline Start
+                            state = 17;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            // End of the file
+                            state = 22;
+                            break;
+                        }
+                        error("Expected Start of Shape or End Paint Save File");
+                        return false;
                     case 2:
-                        // ADD CODE
-                        break;
+                        // Start Parsing Circle: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            state = 3;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Circle color");
+                        return false;
                     case 3:
-                        break;
-                    // ...
+                        // Parsing Circle: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            state = 4;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Circle filled");
+                        return false;
+                    case 4:
+                        // Parsing Circle: looking for center
+                        m = pCenter.matcher(l);
+                        if (m.matches()) {
+                            state = 5;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Circle center");
+                        return false;
+                    case 5:
+                        // Parsing Circle: looking for radius
+                        m = pRadius.matcher(l);
+                        if (m.matches()) {
+                            state = 6;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Circle Radius");
+                        return false;
+                    case 6:
+                        // Parsing Circle: looking for EndCircle
+                        m = pCircleEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 1;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected End Circle");
+                        return false;
+                    case 7:
+                        // Start Parsing Rectangle: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            state = 8;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Rectangle color");
+                        return false;
+                    case 8:
+                        // Parsing Rectangle: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            state = 9;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Rectangle filled");
+                        return false;
+                    case 9:
+                        // Parsing Rectangle: looking for p1
+                        m = pP1.matcher(l);
+                        if (m.matches()) {
+                            state = 10;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Rectangle p1");
+                        return false;
+                    case 10:
+                        // Parsing Rectangle: looking for p2
+                        m = pP2.matcher(l);
+                        if (m.matches()) {
+                            state = 11;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Rectangle p2");
+                        return false;
+                    case 11:
+                        // Parsing Rectangle: looking for EndRectangle
+                        m = pRectangleEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 1;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected End Rectangle");
+                        return false;
+                    case 12:
+                        // Start Parsing Squiggle: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            state = 13;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Squiggle color");
+                    case 13:
+                        // Parsing Squiggle: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            state = 14;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Squiggle filled");
+                        return false;
+                    case 14:
+                        // Parsing Squiggle: looking for points
+                        m = pPointsBegin.matcher(l);
+                        if (m.matches()) {
+                            state = 15;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Squiggle points");
+                        return false;
+                    case 15:
+                        // Parsing Squiggle: looking for point or end points
+                        m = pPoint.matcher(l);
+                        if (m.matches()) {
+                            break;
+                        }
+                        m = pPointsEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 16;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Squiggle point or end points");
+                        return false;
+                    case 16:
+                        // Parsing Squiggle: looking for EndSquiggle
+                        m = pSquiggleEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 1;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected End Squiggle");
+                        return false;
+                    case 17:
+                        // Start Parsing Polyline: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            state = 18;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Polyline color");
+                        return false;
+                    case 18:
+                        // Parsing Polyline: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            state = 19;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Polyline filled");
+                        return false;
+                    case 19:
+                        // Parsing Polyline: looking for points
+                        m = pPointsBegin.matcher(l);
+                        if (m.matches()) {
+                            state = 20;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Polyline points");
+                        return false;
+                    case 20:
+                        // Parsing Polyline: looking for point or end points
+                        m = pPoint.matcher(l);
+                        if (m.matches()) {
+                            break;
+                        }
+                        m = pPointsEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 21;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected Polyline point or end points");
+                        return false;
+                    case 21:
+                        // Parsing Polyline: looking for EndPolyline
+                        m = pPolylineEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 1;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            error("Unexpected end of file");
+                            return false;
+                        }
+                        error("Expected End Polyline");
+                        return false;
+                    case 22:
+                        // Accepting/End State: Has read EndPaintSaveFile (Anything further and do not accept)
+                        error("Extra content after End of File");
+                        return false;
+
                     /**
                      * I have around 20+/-5 cases in my FSM. If you have too many
                      * more or less, you are doing something wrong. Too few, and I bet I can find
@@ -203,6 +513,7 @@ public class PaintFileParser {
                      */
                 }
             }
+            return (state == 22);
         } catch (Exception e) {
 
         }
