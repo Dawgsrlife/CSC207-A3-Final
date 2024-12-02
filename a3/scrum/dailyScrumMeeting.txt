@@ -83,7 +83,7 @@ Nov 30, 2024
 
 Dec 1, 2024
 	Yesterday : US3.3 almost complete.
-	Today     :
+	Today     : Add and complete BUG3.21 and BUG3.22; complete US3.3. Begin working on Part 2 of assignment.
 	Obstacles : Understanding that commands can be built and then added to a temporary model, which can be used or discarded.
 	
 Dec 2, 2024
