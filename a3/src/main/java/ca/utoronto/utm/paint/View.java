@@ -139,7 +139,6 @@ public class View implements EventHandler<ActionEvent> {
             File file = fc.showOpenDialog(this.stage);
 
             if (file != null) {
-
                 try {
                     System.out.println("Opening: " + file.getName() + "." + "\n");
                     BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -152,7 +151,7 @@ public class View implements EventHandler<ActionEvent> {
                         System.out.println("Error while loading file: " + parser.getErrorMessage());
                     }
                 } catch (IOException e) {
-                    System.out.println("Parsing issue (invalid file).");
+                    System.out.println("Parsing issue.");
                 }
             } else {
                 System.out.println("Open command cancelled by user." + "\n");

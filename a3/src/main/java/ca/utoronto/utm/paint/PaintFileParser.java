@@ -211,9 +211,10 @@ public class PaintFileParser {
                         return false;
                     case 3:
                         // Parsing Circle: looking for filled
-
                         m = pFilled.matcher(l);
                         if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            circleCommand.setFill(filled);
                             state = 4;
                             break;
                         }
@@ -223,6 +224,10 @@ public class PaintFileParser {
                         // Parsing Circle: looking for center
                         m = pCenter.matcher(l);
                         if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point centre = new Point(x, y);
+                            circleCommand.setCentre(centre);
                             state = 5;
                             break;
                         }
@@ -232,6 +237,8 @@ public class PaintFileParser {
                         // Parsing Circle: looking for radius
                         m = pRadius.matcher(l);
                         if (m.matches()) {
+                            int radius = Integer.parseInt(m.group(1));
+                            circleCommand.setRadius(radius);
                             state = 6;
                             break;
                         }
@@ -241,6 +248,8 @@ public class PaintFileParser {
                         // Parsing Circle: looking for EndCircle
                         m = pCircleEnd.matcher(l);
                         if (m.matches()) {
+                            paintModel.addCommand(circleCommand);
+                            circleCommand = null;
                             state = 1;
                             break;
                         }
@@ -250,6 +259,11 @@ public class PaintFileParser {
                         // Start Parsing Rectangle: looking for color
                         m = pColor.matcher(l);
                         if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            rectangleCommand.setColor(Color.rgb(r, g, b));
                             state = 8;
                             break;
                         }
@@ -259,6 +273,8 @@ public class PaintFileParser {
                         // Parsing Rectangle: looking for filled
                         m = pFilled.matcher(l);
                         if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            rectangleCommand.setFill(filled);
                             state = 9;
                             break;
                         }
@@ -268,6 +284,10 @@ public class PaintFileParser {
                         // Parsing Rectangle: looking for p1
                         m = pP1.matcher(l);
                         if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point p1 = new Point(x, y);
+                            rectangleCommand.setP1(p1);
                             state = 10;
                             break;
                         }
@@ -277,6 +297,10 @@ public class PaintFileParser {
                         // Parsing Rectangle: looking for p2
                         m = pP2.matcher(l);
                         if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point p2 = new Point(x, y);
+                            rectangleCommand.setP2(p2);
                             state = 11;
                             break;
                         }
@@ -286,6 +310,8 @@ public class PaintFileParser {
                         // Parsing Rectangle: looking for EndRectangle
                         m = pRectangleEnd.matcher(l);
                         if (m.matches()) {
+                            paintModel.addCommand(rectangleCommand);
+                            rectangleCommand = null;
                             state = 1;
                             break;
                         }
@@ -295,6 +321,11 @@ public class PaintFileParser {
                         // Start Parsing Squiggle: looking for color
                         m = pColor.matcher(l);
                         if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            squiggleCommand.setColor(Color.rgb(r, g, b));
                             state = 13;
                             break;
                         }
@@ -303,13 +334,15 @@ public class PaintFileParser {
                         // Parsing Squiggle: looking for filled
                         m = pFilled.matcher(l);
                         if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            squiggleCommand.setFill(filled);
                             state = 14;
                             break;
                         }
                         error("Expected Squiggle filled");
                         return false;
                     case 14:
-                        // Parsing Squiggle: looking for points
+                        // Parsing Squiggle: looking for (begin) points
                         m = pPointsBegin.matcher(l);
                         if (m.matches()) {
                             state = 15;
@@ -321,6 +354,10 @@ public class PaintFileParser {
                         // Parsing Squiggle: looking for point or end points
                         m = pPoint.matcher(l);
                         if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point point = new Point(x, y);
+                            squiggleCommand.add(point);
                             break;
                         }
                         m = pPointsEnd.matcher(l);
@@ -334,6 +371,7 @@ public class PaintFileParser {
                         // Parsing Squiggle: looking for EndSquiggle
                         m = pSquiggleEnd.matcher(l);
                         if (m.matches()) {
+                            paintModel.addCommand(squiggleCommand);
                             state = 1;
                             break;
                         }
@@ -343,6 +381,11 @@ public class PaintFileParser {
                         // Start Parsing Polyline: looking for color
                         m = pColor.matcher(l);
                         if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            polylineCommand.setColor(Color.rgb(r, g, b));
                             state = 18;
                             break;
                         }
@@ -352,13 +395,15 @@ public class PaintFileParser {
                         // Parsing Polyline: looking for filled
                         m = pFilled.matcher(l);
                         if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            polylineCommand.setFill(filled);
                             state = 19;
                             break;
                         }
                         error("Expected Polyline filled");
                         return false;
                     case 19:
-                        // Parsing Polyline: looking for points
+                        // Parsing Polyline: looking for (start) points
                         m = pPointsBegin.matcher(l);
                         if (m.matches()) {
                             state = 20;
@@ -370,6 +415,10 @@ public class PaintFileParser {
                         // Parsing Polyline: looking for point or end points
                         m = pPoint.matcher(l);
                         if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point point = new Point(x, y);
+                            polylineCommand.add(point);
                             break;
                         }
                         m = pPointsEnd.matcher(l);
@@ -383,6 +432,7 @@ public class PaintFileParser {
                         // Parsing Polyline: looking for EndPolyline
                         m = pPolylineEnd.matcher(l);
                         if (m.matches()) {
+                            paintModel.addCommand(polylineCommand);
                             state = 1;
                             break;
                         }
