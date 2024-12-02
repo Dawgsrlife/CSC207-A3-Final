@@ -59,7 +59,7 @@ TYPE     : BUG 3.22 : mengale1 : STATUS : Complete
 NAME     : Another Small Error on Paint Save File Format
 OWNER    : mengale1
 PRIORITY : 3
-ESTIMATE : 5 minutes    ACTUAL :
+ESTIMATE : 5 minutes    ACTUAL : 5 minutes
 ISSUE    : Save generates a redundant colon (":") character after "points"
            for Squiggle and Polyline.
 --------------------------------------------------------------------------
