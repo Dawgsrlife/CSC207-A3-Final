@@ -1,5 +1,7 @@
 package ca.utoronto.utm.paint;
 
+import javafx.scene.paint.Color;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -25,21 +27,49 @@ public class PaintFileParser {
     /**
      * Below are Patterns used in parsing
      */
+    // File Start and End:
     private Pattern pFileStart = Pattern.compile("^PaintSaveFileVersion1.0$");
     private Pattern pFileEnd = Pattern.compile("^EndPaintSaveFile$");
 
+    // Shared Details:
+    private String colorNum = "([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])";
+    private String coordinate = "\\((-?\\d+),(-?\\d+)\\)";
+    private Pattern pColor = Pattern.compile("^color:" + colorNum + "," + colorNum + "," + colorNum + "$");
+    private Pattern pFilled = Pattern.compile("^filled:(true|false)$");
+
+    // Circle Block:
     private Pattern pCircleStart = Pattern.compile("^Circle$");
     private Pattern pCircleEnd = Pattern.compile("^EndCircle$");
-    // ADD MORE!!
+    private Pattern pCenter = Pattern.compile("^center:" + coordinate + "$");
+    private Pattern pRadius = Pattern.compile("^radius:(\\d+)$");
+
+    // Rectangle Block:
+    private Pattern pRectangleStart = Pattern.compile("^Rectangle$");
+    private Pattern pRectangleEnd = Pattern.compile("^EndRectangle$");
+    private Pattern pP1 = Pattern.compile("^p1:" + coordinate + "$");
+    private Pattern pP2 = Pattern.compile("^p2:" + coordinate + "$");
+
+    // Shared for Squiggle and Polyline:
+    private Pattern pPointsBegin = Pattern.compile("^points$");
+    private Pattern pPoint = Pattern.compile("^point:" + coordinate + "$");
+    private Pattern pPointsEnd = Pattern.compile("^endpoints$");
+
+    // Squiggle Block:
+    private Pattern pSquiggleStart = Pattern.compile("^Squiggle$");
+    private Pattern pSquiggleEnd = Pattern.compile("^EndSquiggle$");
+
+    // Polyline Block:
+    private Pattern pPolylineStart = Pattern.compile("^Polyline$");
+    private Pattern pPolylineEnd = Pattern.compile("^EndPolyline$");
 
     /**
      * Store an appropriate error message in this, including
      * lineNumber where the error occurred.
      *
-     * @param mesg
+     * @param msg
      */
-    private void error(String mesg) {
-        this.errorMessage = "Error in line " + lineNumber + " " + mesg;
+    private void error(String msg) {
+        this.errorMessage = "Error in line " + lineNumber + " " + msg;
     }
 
     /**
@@ -115,10 +145,12 @@ public class PaintFileParser {
 
             this.lineNumber = 0;
             while ((l = inputStream.readLine()) != null) {
+                if (l.isEmpty()) continue;
+                l = l.replaceAll("\\s+", "");
                 this.lineNumber++;
                 System.out.println(lineNumber + " " + l + " " + state);
                 switch (state) {
-                    case 0:
+                    case 0:  // Initial State: looking for file start
                         m = pFileStart.matcher(l);
                         if (m.matches()) {
                             state = 1;
@@ -126,21 +158,291 @@ public class PaintFileParser {
                         }
                         error("Expected Start of Paint Save File");
                         return false;
-                    case 1: // Looking for the start of a new object or end of the save file
+                    case 1:  // Standby State: Looking for the start of a new object or end of the save file
                         m = pCircleStart.matcher(l);
                         if (m.matches()) {
-                            // ADD CODE!!!
+                            // Circle Start
+                            circleCommand = new CircleCommand(null, 0);
                             state = 2;
                             break;
                         }
-                        // ADD CODE
-
+                        m = pRectangleStart.matcher(l);
+                        if (m.matches()) {
+                            // Rectangle Start
+                            rectangleCommand = new RectangleCommand(null, null);
+                            state = 7;
+                            break;
+                        }
+                        m = pSquiggleStart.matcher(l);
+                        if (m.matches()) {
+                            // Squiggle Start
+                            squiggleCommand = new SquiggleCommand();
+                            state = 12;
+                            break;
+                        }
+                        m = pPolylineStart.matcher(l);
+                        if (m.matches()) {
+                            // Polyline Start
+                            polylineCommand = new PolylineCommand();
+                            state = 17;
+                            break;
+                        }
+                        m = pFileEnd.matcher(l);
+                        if (m.matches()) {
+                            // End of the file
+                            state = 22;
+                            break;
+                        }
+                        error("Expected Start of Shape or End Paint Save File");
+                        return false;
                     case 2:
-                        // ADD CODE
-                        break;
+                        // Start Parsing Circle: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            circleCommand.setColor(Color.rgb(r, g, b));
+                            state = 3;
+                            break;
+                        }
+                        error("Expected Circle color");
+                        return false;
                     case 3:
-                        break;
-                    // ...
+                        // Parsing Circle: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            circleCommand.setFill(filled);
+                            state = 4;
+                            break;
+                        }
+                        error("Expected Circle filled");
+                        return false;
+                    case 4:
+                        // Parsing Circle: looking for center
+                        m = pCenter.matcher(l);
+                        if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point centre = new Point(x, y);
+                            circleCommand.setCentre(centre);
+                            state = 5;
+                            break;
+                        }
+                        error("Expected Circle center");
+                        return false;
+                    case 5:
+                        // Parsing Circle: looking for radius
+                        m = pRadius.matcher(l);
+                        if (m.matches()) {
+                            int radius = Integer.parseInt(m.group(1));
+                            circleCommand.setRadius(radius);
+                            state = 6;
+                            break;
+                        }
+                        error("Expected Circle Radius");
+                        return false;
+                    case 6:
+                        // Parsing Circle: looking for EndCircle
+                        m = pCircleEnd.matcher(l);
+                        if (m.matches()) {
+                            paintModel.addCommand(circleCommand);
+                            circleCommand = null;
+                            state = 1;
+                            break;
+                        }
+                        error("Expected End Circle");
+                        return false;
+                    case 7:
+                        // Start Parsing Rectangle: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            rectangleCommand.setColor(Color.rgb(r, g, b));
+                            state = 8;
+                            break;
+                        }
+                        error("Expected Rectangle color");
+                        return false;
+                    case 8:
+                        // Parsing Rectangle: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            rectangleCommand.setFill(filled);
+                            state = 9;
+                            break;
+                        }
+                        error("Expected Rectangle filled");
+                        return false;
+                    case 9:
+                        // Parsing Rectangle: looking for p1
+                        m = pP1.matcher(l);
+                        if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point p1 = new Point(x, y);
+                            rectangleCommand.setP1(p1);
+                            state = 10;
+                            break;
+                        }
+                        error("Expected Rectangle p1");
+                        return false;
+                    case 10:
+                        // Parsing Rectangle: looking for p2
+                        m = pP2.matcher(l);
+                        if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point p2 = new Point(x, y);
+                            rectangleCommand.setP2(p2);
+                            state = 11;
+                            break;
+                        }
+                        error("Expected Rectangle p2");
+                        return false;
+                    case 11:
+                        // Parsing Rectangle: looking for EndRectangle
+                        m = pRectangleEnd.matcher(l);
+                        if (m.matches()) {
+                            paintModel.addCommand(rectangleCommand);
+                            rectangleCommand = null;
+                            state = 1;
+                            break;
+                        }
+                        error("Expected End Rectangle");
+                        return false;
+                    case 12:
+                        // Start Parsing Squiggle: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            squiggleCommand.setColor(Color.rgb(r, g, b));
+                            state = 13;
+                            break;
+                        }
+                        error("Expected Squiggle color");
+                    case 13:
+                        // Parsing Squiggle: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            squiggleCommand.setFill(filled);
+                            state = 14;
+                            break;
+                        }
+                        error("Expected Squiggle filled");
+                        return false;
+                    case 14:
+                        // Parsing Squiggle: looking for (begin) points
+                        m = pPointsBegin.matcher(l);
+                        if (m.matches()) {
+                            state = 15;
+                            break;
+                        }
+                        error("Expected Squiggle points");
+                        return false;
+                    case 15:
+                        // Parsing Squiggle: looking for point or end points
+                        m = pPoint.matcher(l);
+                        if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point point = new Point(x, y);
+                            squiggleCommand.add(point);
+                            break;
+                        }
+                        m = pPointsEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 16;
+                            break;
+                        }
+                        error("Expected Squiggle point or end points");
+                        return false;
+                    case 16:
+                        // Parsing Squiggle: looking for EndSquiggle
+                        m = pSquiggleEnd.matcher(l);
+                        if (m.matches()) {
+                            paintModel.addCommand(squiggleCommand);
+                            state = 1;
+                            break;
+                        }
+                        error("Expected End Squiggle");
+                        return false;
+                    case 17:
+                        // Start Parsing Polyline: looking for color
+                        m = pColor.matcher(l);
+                        if (m.matches()) {
+                            int r, g, b;
+                            r = Integer.parseInt(m.group(1));
+                            g = Integer.parseInt(m.group(2));
+                            b = Integer.parseInt(m.group(3));
+                            polylineCommand.setColor(Color.rgb(r, g, b));
+                            state = 18;
+                            break;
+                        }
+                        error("Expected Polyline color");
+                        return false;
+                    case 18:
+                        // Parsing Polyline: looking for filled
+                        m = pFilled.matcher(l);
+                        if (m.matches()) {
+                            boolean filled = Boolean.parseBoolean(m.group(1));
+                            polylineCommand.setFill(filled);
+                            state = 19;
+                            break;
+                        }
+                        error("Expected Polyline filled");
+                        return false;
+                    case 19:
+                        // Parsing Polyline: looking for (start) points
+                        m = pPointsBegin.matcher(l);
+                        if (m.matches()) {
+                            state = 20;
+                            break;
+                        }
+                        error("Expected Polyline points");
+                        return false;
+                    case 20:
+                        // Parsing Polyline: looking for point or end points
+                        m = pPoint.matcher(l);
+                        if (m.matches()) {
+                            int x = Integer.parseInt(m.group(1));
+                            int y = Integer.parseInt(m.group(2));
+                            Point point = new Point(x, y);
+                            polylineCommand.add(point);
+                            break;
+                        }
+                        m = pPointsEnd.matcher(l);
+                        if (m.matches()) {
+                            state = 21;
+                            break;
+                        }
+                        error("Expected Polyline point or end points");
+                        return false;
+                    case 21:
+                        // Parsing Polyline: looking for EndPolyline
+                        m = pPolylineEnd.matcher(l);
+                        if (m.matches()) {
+                            paintModel.addCommand(polylineCommand);
+                            state = 1;
+                            break;
+                        }
+                        error("Expected End Polyline");
+                        return false;
+                    case 22:
+                        // Accepting/End State: Has read EndPaintSaveFile (Anything further and do not accept)
+                        error("Extra content after End of File");
+                        return false;
+
                     /**
                      * I have around 20+/-5 cases in my FSM. If you have too many
                      * more or less, you are doing something wrong. Too few, and I bet I can find
@@ -174,6 +476,10 @@ public class PaintFileParser {
                      error("Unexpected end of file");
                      */
                 }
+            }
+            if (state != 22) {
+                error("Unexpected end of file");
+                return false;
             }
         } catch (Exception e) {
 

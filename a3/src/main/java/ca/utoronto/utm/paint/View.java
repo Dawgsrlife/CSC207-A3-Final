@@ -1,9 +1,6 @@
 package ca.utoronto.utm.paint;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -134,22 +131,35 @@ public class View implements EventHandler<ActionEvent> {
         String command = ((MenuItem) event.getSource()).getText();
         if (command.equals("Open")) {
             FileChooser fc = new FileChooser();
+
+            // Set the title and file extension type:
+            fc.setTitle("Open Paint File");
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Files (*.a3p)", "*.a3p"));
+
             File file = fc.showOpenDialog(this.stage);
 
             if (file != null) {
-                System.out.println("Opening: " + file.getName() + "." + "\n");
-                // BufferedReader bufferedReader=null; // FIX THIS
-                PaintModel paintModel = new PaintModel();
-                // PaintFileParser parser = new PaintFileParser();
-                // parser.parse(bufferedReader,  paintModel);
-                this.setPaintModel(paintModel);
+                try {
+                    System.out.println("Opening: " + file.getName() + "." + "\n");
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                    PaintModel newModel = new PaintModel();
+                    PaintFileParser parser = new PaintFileParser();
+                    if (parser.parse(bufferedReader, newModel)) {
+                        this.setPaintModel(newModel);
+                        System.out.println("File loaded successfully.");
+                    } else {
+                        System.out.println("Error while loading file: " + parser.getErrorMessage());
+                    }
+                } catch (IOException e) {
+                    System.out.println("Parsing issue.");
+                }
             } else {
                 System.out.println("Open command cancelled by user." + "\n");
             }
         } else if (command.equals("Save")) {
             FileChooser fc = new FileChooser();
 
-            // Set the title and initial directory:
+            // Set the title and file extension type:
             fc.setTitle("Save Paint File");
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format (*.pssf)", "*.pssf"));
 
