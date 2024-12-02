@@ -82,9 +82,9 @@ Nov 30, 2024
 	Obstacles : Git branch organization; figuring out the state machines for parsing strings of a desired format.
 
 Dec 1, 2024
-	Yesterday :
+	Yesterday : US3.3 almost complete.
 	Today     :
-	Obstacles :
+	Obstacles : Understanding that commands can be built and then added to a temporary model, which can be used or discarded.
 	
 Dec 2, 2024
 	Yesterday :

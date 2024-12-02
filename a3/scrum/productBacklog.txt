@@ -45,6 +45,16 @@ You can find the format of the save file in the
 project under paintSaveFileFormat.txt.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
+TYPE     : BUG 3.21 : mengale1 : STATUS : NotStarted
+NAME     : Small Error on Paint Save File Format
+OWNER    : mengale1
+PRIORITY : 3
+ESTIMATE : 5 minutes    ACTUAL :
+ISSUE    : Save has a slight discrepancy in matching the points p1 and p2
+           of a rectangle. RectangleCommand.getPaintSaveFileString() needs
+           to be adjusted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
 TYPE     : USER STORY 3.3 : mengale1 : STATUS : InProgress
 NAME     : Load
 OWNER    : mengale1
