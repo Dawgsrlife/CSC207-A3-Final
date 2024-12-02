@@ -43,7 +43,7 @@ public class SquiggleCommand extends PaintCommand {
         details = details.substring(startIndex);
         sb.append(details);
 
-        sb.append("\tpoints:\n");
+        sb.append("\tpoints\n");
         for (Point point : points) {
             sb.append("\t\tpoint:(").append(point.x).append(",").append(point.y).append(")\n");
         }
