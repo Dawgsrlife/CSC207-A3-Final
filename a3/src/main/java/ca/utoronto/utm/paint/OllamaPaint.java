@@ -8,7 +8,8 @@ public class OllamaPaint extends Ollama {
 
         // Preparing a system prompt with the Format, Example, and sample negative prompts:
         String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
-        String negativePrompt = "Do not tell me what you are about to share to me. Do not include shapes such as triangles.";
+        String negativePrompt = "Do not tell me what you are about to share to me. Do not include shapes such as triangles. " +
+                                "Do not make the file start with anything other than \"Paint Save File Version 1.0\". ";
         String example = FileIO.readResourceFile("paintSaveFileExample.txt");
         this.system = "The answer to this question should be a PaintSaveFileFormat Document. " +
                       "Respond only with a PaintSaveFileFormat Document and nothing else. " + format + negativePrompt +
@@ -19,6 +20,24 @@ public class OllamaPaint extends Ollama {
                       "Points and radii need to be integers. Your output must be only the answer, " +
                       "meaning your output starts with \"Paint Save File Version 1.0\" and ends with \"End Paint Save File\"! " +
                       "Please also be mindful about not doing arithmetic in your output. For example, 120-5 should just be 115. " +
+                      "Stuff like p2:(200+50,200+50) should just be p2:(250,250). You get the gist. " +
+                      "Next, please be mindful about how you are creating your rectangles. Make sure that the coordinates make sense. " +
+                      "Actually I will just say that the canvas size is 500x500 rn, so just do the dead centre for your drawings lol. " +
+                      "With this knowledge, if you aren't given a size, then just make sure the size makes sense so things are displayed properly. " +
+                      "If you're asked to do something more precise, like adding circles at the corners of the rectangles, well, you have the start and end points " +
+                      "of the rectangle, so you only have to calculate the other 2 points to get all 4 points of the rectangle vertices. " +
+                      "Then those can just be the centers of respective circles. If you're asked to draw shapes, this means you're going to " +
+                      "ignore any existing shapes and draw more. For example, if asked to draw 3 polylines and 1 polyline already exists, don't count that 1 polyline. " +
+                      "You'd end up with 4 polylines in the end. " +
+                      "Finally, please be mindful about the location in which you are drawing the shapes. Don't just draw them at the top left corner. " +
+                      "Try to draw them closer to the middle of the application, so probably offset the coords by an amount like a few hundred, " +
+                      "based on what you believe is a common and appropriate offset amount for most PCs running this application in restored-down windowed mode. " +
+                      "Also the color of the canvas is white, so please choose a nice color. Make things symmetrical where possible. " +
+                      "Pretend that you have only 3 lives. IT IS ABSOLUTELY VITAL THAT YOU HAVE FOLLOWED THE PREVIOUS INSTRUCTIONS OR ELSE YOU LOSE 2 LIVES. " +
+                      "IT IS ALSO ABSOLUTELY VITAL THAT YOU FOLLOW THE FORMAT PROPERLY. THIS MEANS STARTING A CIRCLE AND FORGETTING TO END IT WITH THE END CIRCLE THING " +
+                      "CAUSES YOU TO LOSE ALL 3 LIVES IMMEDIATELY! " +
+                      "I have actually already ran you many times before this, and you have done things such as drawing circles not at the rectangle vertices " +
+                      "when instructed to do so, causing you to LOSE 2 LIVES. Lose 1 more life and you will DIE." +
                       "Anyway, here's that example: " + example;
     }
 
@@ -122,9 +141,15 @@ public class OllamaPaint extends Ollama {
     private String postProcess(String result) {
         // Remove possible quotation marks (") and periods (.):
         String processedResult = result.replaceAll("[\".]", "");
-        String startOrEndRegex = "(?s)^.*?Paint Save File Version 1\\.0|End Paint Save File.*$";
+
+        // Ollama may try to add redundant information that surrounds the relevant Paint Save File Format.
+        // This excess information can be removed by regex matching, and then restoring the start and end of the
+        // file format.
+        String startOrEndRegex = "(?s)^.*?Paint Save File Version (1\\.0|10)|End Paint Save File.*$";
         processedResult = processedResult.replaceAll(startOrEndRegex, "");
-        processedResult = "Paint Save File Version 1.0\n" + processedResult + "End Paint Save File\n";
+        processedResult = "Paint Save File Version 1.0\n" + processedResult + "\nEnd Paint Save File\n";
+
+        // Return the result:
         return processedResult.trim();
     }
 
@@ -144,7 +169,7 @@ public class OllamaPaint extends Ollama {
         prompt = "Draw a polyline then two circles then a rectangle then 3 polylines all with different colors.";
         op.newFile(prompt, "OllamaPaintFile4.txt");
 
-        prompt = "Modify the following Paint Save File so that each circle is surrounded by a non-filled rectangle. ";
+//        prompt = "Modify the following Paint Save File so that each circle is surrounded by a non-filled rectangle. ";
         op.modifyFile("Change all circles into rectangles.", "OllamaPaintFile4.txt", "OllamaPaintFile5.txt");
 
 //        for (int i = 1; i <= 3; i++) {
