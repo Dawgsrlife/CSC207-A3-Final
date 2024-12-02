@@ -1,8 +1,22 @@
 package ca.utoronto.utm.paint;
 
 public class OllamaPaint extends Ollama {
+    private final String system;
+
     public OllamaPaint(String host) {
         super(host);
+
+        // Preparing a system prompt with the Format, Example, and sample negative prompts:
+        String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
+        String negativePrompt = "Do not tell me what you are about to share to me. Do not include shapes such as triangles.";
+        String example = FileIO.readResourceFile("paintSaveFileExample.txt");
+        this.system = "The answer to this question should be a PaintSaveFileFormat Document. " +
+                      "Respond only with a PaintSaveFileFormat Document and nothing else. " + format + negativePrompt +
+                      "Your file should look like the structure of the example that will follow. " +
+                      "If what you're being asked to create isn't a feature, then try to create something similar " +
+                      "that is still within the valid features: color and filled for all shapes, points for squiggle " +
+                      "and polyline, center and radius for circle, p1 and p2 for rectangle. " +
+                      "Anyway, here's that example: " + example;
     }
 
     /**
@@ -12,15 +26,8 @@ public class OllamaPaint extends Ollama {
      * @param outFileName name of new file to be created in users home directory
      */
     public void newFile(String prompt, String outFileName) {
-        String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
-        String example = FileIO.readResourceFile("paintSaveFileExample.txt");
-        String system = "The answer to this question should be a PaintSaveFileFormat Document. " +
-                "Respond only with a PaintSaveFileFormat Document and nothing else. Don't even say what you're giving me. " +
-                format + "Here's an example (your file should look like the structure of the example;" +
-                "if what you're being asked isn't a feature, then try to create something similar " +
-                "[features include: color, filled, points for squiggle and polyline, center and radius for circle, p1 and p2 for rectangle]):" + example;
-        String response = this.call(system, prompt);
-        FileIO.writeHomeFile(response, outFileName);
+        String processedResponse = postProcess(this.call(system, prompt));
+        FileIO.writeHomeFile(processedResponse, outFileName);
     }
 
     /**
@@ -31,23 +38,12 @@ public class OllamaPaint extends Ollama {
      * @param outFileName name of new file to be created in users home directory
      */
     public void modifyFile(String prompt, String inFileName, String outFileName) {
-        // Your job is to create the right system and prompt.
-        // then call Ollama and write the new file in the home directory
-        // HINT: You should have a collection of resources, examples, prompt wrapper etc. available
-        // in the resources directory. See OllamaNumberedFile as an example.
-        String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
-        String example = FileIO.readResourceFile("paintSaveFileExample.txt");
-        String system = "The answer to this question should be a PaintSaveFileFormat Document. " +
-                "Respond only with a PaintSaveFileFormat Document and nothing else. Don't even say what you're giving me. " +
-                format + "Here's an example (your file should look like the structure of the example;" +
-                "if what you're being asked isn't a feature, then try to create something similar " +
-                "[features include: color, filled, points for squiggle and polyline, center and radius for circle, p1 and p2 for rectangle]):" + example;
         String f = FileIO.readHomeFile(inFileName);
         String fullPrompt = "Produce a new PaintSaveFileFormat Document, resulting from the following OPERATION " +
-                            "being performed on the following PaintSaveFileFormat Document. OPERATION START"
-                            + prompt + " OPERATION END " + f;
-        String response = this.call(system, fullPrompt);
-        FileIO.writeHomeFile(response, outFileName);
+                "being performed on the following PaintSaveFileFormat Document. OPERATION START"
+                + prompt + " OPERATION END " + f;
+        String processedResponse = postProcess(this.call(system, fullPrompt));
+        FileIO.writeHomeFile(processedResponse, outFileName);
     }
 
     /**
@@ -62,7 +58,7 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * newFile2: Creates a Paint File with a gradient of circles.
+     * newFile2: Creates a Paint File with circles of increasing radius, where each circle is a different shade of blue.
      *
      * @param outFileName the name of the new file in the users home directory
      */
@@ -97,7 +93,7 @@ public class OllamaPaint extends Ollama {
 
     /**
      * modifyFile2: MODIFY inFileName TO PRODUCE outFileName BY converting all shapes in the file
-     *              to have rounded corners.
+     * to have rounded corners.
      *
      * @param inFileName  the name of the source file in the users home directory
      * @param outFileName the name of the new file in the users home directory
@@ -118,6 +114,12 @@ public class OllamaPaint extends Ollama {
     public void modifyFile3(String inFileName, String outFileName) {
         String prompt = "Change all shapes in the Paint file to be some shade of red.";
         modifyFile(prompt, inFileName, outFileName);
+    }
+
+    private String postProcess(String result) {
+        String processedResult = result.replaceAll("\"", "");
+        processedResult = processedResult.replaceAll(" ", "");
+        return processedResult.trim();
     }
 
     public static void main(String[] args) {
