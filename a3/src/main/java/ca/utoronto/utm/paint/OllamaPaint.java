@@ -13,7 +13,12 @@ public class OllamaPaint extends Ollama {
      */
     public void newFile(String prompt, String outFileName) {
         String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
-        String system = "The answer to this question should be a PaintSaveFileFormat Document. Respond only with a PaintSaveFileFormat Document and nothing else. " + format;
+        String example = FileIO.readResourceFile("paintSaveFileExample.txt");
+        String system = "The answer to this question should be a PaintSaveFileFormat Document. " +
+                "Respond only with a PaintSaveFileFormat Document and nothing else. Don't even say what you're giving me. " +
+                format + "Here's an example (your file should look like the structure of the example;" +
+                "if what you're being asked isn't a feature, then try to create something similar " +
+                "[features include: color, filled, points for squiggle and polyline, center and radius for circle, p1 and p2 for rectangle]):" + example;
         String response = this.call(system, prompt);
         FileIO.writeHomeFile(response, outFileName);
     }
@@ -31,9 +36,16 @@ public class OllamaPaint extends Ollama {
         // HINT: You should have a collection of resources, examples, prompt wrapper etc. available
         // in the resources directory. See OllamaNumberedFile as an example.
         String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
-        String system = "The answer to this question should be a PaintSaveFileFormat Document. Respond only with a PaintSaveFileFormat Document and nothing else. " + format;
-        String f = FileIO.readResourceFile(inFileName);
-        String fullPrompt = "Produce a new PaintSaveFileFormat Document, resulting from the following OPERATION being performed on the following PaintSaveFileFormat Document. OPERATION START" + prompt + " OPERATION END " + f;
+        String example = FileIO.readResourceFile("paintSaveFileExample.txt");
+        String system = "The answer to this question should be a PaintSaveFileFormat Document. " +
+                "Respond only with a PaintSaveFileFormat Document and nothing else. Don't even say what you're giving me. " +
+                format + "Here's an example (your file should look like the structure of the example;" +
+                "if what you're being asked isn't a feature, then try to create something similar " +
+                "[features include: color, filled, points for squiggle and polyline, center and radius for circle, p1 and p2 for rectangle]):" + example;
+        String f = FileIO.readHomeFile(inFileName);
+        String fullPrompt = "Produce a new PaintSaveFileFormat Document, resulting from the following OPERATION " +
+                            "being performed on the following PaintSaveFileFormat Document. OPERATION START"
+                            + prompt + " OPERATION END " + f;
         String response = this.call(system, fullPrompt);
         FileIO.writeHomeFile(response, outFileName);
     }
