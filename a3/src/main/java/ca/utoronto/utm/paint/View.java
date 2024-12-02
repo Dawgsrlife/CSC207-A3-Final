@@ -151,7 +151,7 @@ public class View implements EventHandler<ActionEvent> {
 
             // Set the title and initial directory:
             fc.setTitle("Save Paint File");
-            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Files (*.a3p)", "*.a3p"));
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format (*.pssf)", "*.pssf"));
 
             File file = fc.showSaveDialog(this.stage);
 
