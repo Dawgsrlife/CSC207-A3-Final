@@ -13,7 +13,7 @@ public class OllamaPaint extends Ollama {
                                 "You must not add random arithmetic like subtraction or addition for coords. " +
                                 "This means something like p1:(125,275-25) needs to be p1:(125,250). " +
                                 "Don't trip and give me English responses. No being lazy. " +
-                                "Do not put in random punctuation or symbols (such as periods or commas) if it isn't necessary. " +
+                                "Do not put in random punctuation or symbols (such as periods or commas or brackets) if it isn't necessary. " +
                                 "Please also be mindful about not doing arithmetic in your output. For example, 120-5 should just be 115. " +
                                 "Stuff like p2:(200+50,200+50) should just be p2:(250,250). You get the gist. ";
                 String example = FileIO.readResourceFile("paintSaveFileExample.txt");
@@ -51,7 +51,11 @@ public class OllamaPaint extends Ollama {
                       "REMEMBER: YOU STILL ONLY HAVE LIMITED LIVES, WHICH YOU CAN LOSE EASILY. " +
                       "Doing stuff like p1:(125,375-75) instead of p1:(125,300) will cause you to INSTANTLY DIE. DON'T BE LAZY! " +
                       "Also for putting circles on rectangle vertices, really make sure the circles are on the correct vertices. " +
-                      "This means at least some circle centers should match" + "p1 or p2 of the rectangles. You will be awarded 1 life for doing this correctly! " +
+                      "E.g. If you're asked to draw 4 circles at the the corners of a rectangle, then two of the circles need to be " +
+                      "having the same center as the point p1 and p2 respectively, and the other two can be calculated " +
+                      "by mixing and matching the x and y values CORRECTLY. Let's say we have p1 is coords a, b and p2 is coords c, d. " +
+                      "Then two of the circles need to have center point being a, b and c, d, and the other two circles would have center point c, b and a, d. " +
+                      "You will be awarded 1 life for doing this correctly! " +
                       "Also put your images in the center. Again, the size of the canvas is 500x500." +
                       "Anyway, here's that example: " + example;
     }
