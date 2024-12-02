@@ -118,3 +118,25 @@ Now that USER STORY 3.2 and 3.4 are in place...
 Apply the Visitor Design Pattern to the save function. After this, the model 
 will not implement the save function, so you should remove PaintModel.save.
 --------------------------------------------------------------------------
+--------------------------------------------------------------------------
+TYPE     : USER STORY 3.6 : mengale1 : STATUS : NotStarted
+NAME     : OllamaPaint
+OWNER    : mengale1
+PRIORITY : 3
+ESTIMATE : 10 hours    ACTUAL :
+AS A     : user
+ISSUE    : Implement OllamaPaint.java to generate and modify interesting
+           Paint File Format files.
+
+IMPL DTL :
+- Implement OllamaPaint.newFile(), OllamaPaint.newFile1(),
+  OllamaPaint.newFile2, OllamaPaint.newFile3() to create valid Paint File
+  Format files.
+- Implement OllamaPaint.modifyFile(), OllamaPaint.modifyFile1(),
+  OllamaPaint.modifyFile2(), OllamaPaint.modifyFile3() to modify files
+  meaningfully.
+- Ensure all generated and modified files are parsable and adhere to the Paint
+  File Format.
+- Validate compatibility with Paint application through extensive Testing.
+--------------------------------------------------------------------------
+
