@@ -129,11 +129,21 @@ public class View implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         System.out.println(((MenuItem) event.getSource()).getText());
         String command = ((MenuItem) event.getSource()).getText();
+
+        // Access the Downloads Folder (no matter the OS):
+        String downloadsPath = System.getProperty("user.home") + File.separator + "Downloads";
+        File downloadsFolder = new File(downloadsPath);
+        // Fallback to the Home directory if the Downloads folder doesn't exist:
+        if (!downloadsFolder.exists() || !downloadsFolder.isDirectory()) {
+            downloadsFolder = new File(System.getProperty("user.home"));
+        }
+
         if (command.equals("Open")) {
             FileChooser fc = new FileChooser();
 
             // Set the title and file extension type:
             fc.setTitle("Open Paint File");
+            fc.setInitialDirectory(downloadsFolder);
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
@@ -162,6 +172,7 @@ public class View implements EventHandler<ActionEvent> {
 
             // Set the title and file extension type:
             fc.setTitle("Save Paint File");
+            fc.setInitialDirectory(downloadsFolder);
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
