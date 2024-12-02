@@ -134,6 +134,7 @@ public class View implements EventHandler<ActionEvent> {
 
             // Set the title and file extension type:
             fc.setTitle("Open Paint File");
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
             File file = fc.showOpenDialog(this.stage);
@@ -161,6 +162,7 @@ public class View implements EventHandler<ActionEvent> {
 
             // Set the title and file extension type:
             fc.setTitle("Save Paint File");
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
             File file = fc.showSaveDialog(this.stage);

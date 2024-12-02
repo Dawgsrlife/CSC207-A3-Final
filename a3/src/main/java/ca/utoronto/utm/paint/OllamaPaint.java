@@ -39,72 +39,78 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * newFile1: DESCRIBE YOUR INTERESTING NEW PAINT FILE HERE
+     * newFile1: Creates a Paint File with basic shapes in a grid layout.
      *
      * @param outFileName the name of the new file in the users home directory
      */
     @Override
     public void newFile1(String outFileName) {
-        // YOUR CODE GOES HERE
+        String prompt = "Create a Paint file with a grid layout of 3x3 rectangles, each 50x50 in size, with alternating colors.";
+        newFile(prompt, outFileName);
     }
 
     /**
-     * newFile2: DESCRIBE YOUR INTERESTING NEW PAINT FILE HERE
+     * newFile2: Creates a Paint File with a gradient of circles.
      *
      * @param outFileName the name of the new file in the users home directory
      */
     @Override
     public void newFile2(String outFileName) {
-        // YOUR CODE GOES HERE
+        String prompt = "Draw 10 circles in a vertical line with increasing radius, each circle a different shade of blue.";
+        newFile(prompt, outFileName);
     }
 
     /**
-     * newFile3: DESCRIBE YOUR INTERESTING NEW PAINT FILE HERE
+     * newFile3: Creates a Paint File with a geometric art pattern.
      *
      * @param outFileName the name of the new file in the users home directory
      */
     @Override
     public void newFile3(String outFileName) {
-        // YOUR CODE GOES HERE
+        String prompt = "Create an abstract pattern of overlapping triangles and circles with random colors.";
+        newFile(prompt, outFileName);
     }
 
     /**
-     * modifyFile1: MODIFY inFileName TO PRODUCE outFileName BY ...
+     * modifyFile1: MODIFY inFileName TO PRODUCE outFileName adding a shadow effect to all shapes.
      *
      * @param inFileName  the name of the source file in the users home directory
      * @param outFileName the name of the new file in the users home directory
      */
     @Override
     public void modifyFile1(String inFileName, String outFileName) {
-        // YOUR CODE GOES HERE
+        String prompt = "Add a shadow effect to every shape in the Paint file.";
+        modifyFile(prompt, inFileName, outFileName);
     }
 
     /**
-     * modifyFile2: MODIFY inFileName TO PRODUCE outFileName BY ...
+     * modifyFile2: MODIFY inFileName TO PRODUCE outFileName BY converting all shapes in the file
+     *              to have rounded corners.
      *
      * @param inFileName  the name of the source file in the users home directory
      * @param outFileName the name of the new file in the users home directory
      */
     @Override
     public void modifyFile2(String inFileName, String outFileName) {
-        // YOUR CODE GOES HERE
+        String prompt = "Convert all shapes in the Paint file to have rounded corners.";
+        modifyFile(prompt, inFileName, outFileName);
     }
 
     /**
-     * modifyFile3: MODIFY inFileName TO PRODUCE outFileName BY ...
+     * modifyFile3: MODIFY inFileName TO PRODUCE outFileName BY changing all shapes to have some shade of red.
      *
      * @param inFileName  the name of the source file in the users home directory
      * @param outFileName the name of the new file in the users home directory
      */
     @Override
     public void modifyFile3(String inFileName, String outFileName) {
-        // YOUR CODE GOES HERE
+        String prompt = "Change all shapes in the Paint file to be some shade of red.";
+        modifyFile(prompt, inFileName, outFileName);
     }
 
     public static void main(String[] args) {
-        String prompt = null;
+        String prompt;
 
-        prompt = "Draw a 100 by 120 rectangle with 4 radius 5 circles at each rectangle corner.";
         OllamaPaint op = new OllamaPaint("dh2010pc42.utm.utoronto.ca"); // Replace this with your assigned Ollama server.
 
         prompt = "Draw a 100 by 120 rectangle with 4 radius 5 circles at each rectangle corner.";
