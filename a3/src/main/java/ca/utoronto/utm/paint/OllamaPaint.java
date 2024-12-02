@@ -16,6 +16,9 @@ public class OllamaPaint extends Ollama {
                       "If what you're being asked to create isn't a feature, then try to create something similar " +
                       "that is still within the valid features: color and filled for all shapes, points for squiggle " +
                       "and polyline, center and radius for circle, p1 and p2 for rectangle. " +
+                      "Points and radii need to be integers. Your output must be only the answer, " +
+                      "meaning your output starts with \"Paint Save File Version 1.0\" and ends with \"End Paint Save File\"! " +
+                      "Please also be mindful about not doing arithmetic in your output. For example, 120-5 should just be 115. " +
                       "Anyway, here's that example: " + example;
     }
 
@@ -117,8 +120,11 @@ public class OllamaPaint extends Ollama {
     }
 
     private String postProcess(String result) {
-        String processedResult = result.replaceAll("\"", "");
-        processedResult = processedResult.replaceAll(" ", "");
+        // Remove possible quotation marks (") and periods (.):
+        String processedResult = result.replaceAll("[\".]", "");
+        String startOrEndRegex = "(?s)^.*?Paint Save File Version 1\\.0|End Paint Save File.*$";
+        processedResult = processedResult.replaceAll(startOrEndRegex, "");
+        processedResult = "Paint Save File Version 1.0\n" + processedResult + "End Paint Save File\n";
         return processedResult.trim();
     }
 
@@ -141,17 +147,17 @@ public class OllamaPaint extends Ollama {
         prompt = "Modify the following Paint Save File so that each circle is surrounded by a non-filled rectangle. ";
         op.modifyFile("Change all circles into rectangles.", "OllamaPaintFile4.txt", "OllamaPaintFile5.txt");
 
-        for (int i = 1; i <= 3; i++) {
-            op.newFile1("PaintFile1_" + i + ".txt");
-            op.newFile2("PaintFile2_" + i + ".txt");
-            op.newFile3("PaintFile3_" + i + ".txt");
-        }
-        for (int i = 1; i <= 3; i++) {
-            for (int j = 1; j <= 3; j++) {
-                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
-                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
-                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
-            }
-        }
+//        for (int i = 1; i <= 3; i++) {
+//            op.newFile1("PaintFile1_" + i + ".txt");
+//            op.newFile2("PaintFile2_" + i + ".txt");
+//            op.newFile3("PaintFile3_" + i + ".txt");
+//        }
+//        for (int i = 1; i <= 3; i++) {
+//            for (int j = 1; j <= 3; j++) {
+//                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
+//                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
+//                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
+//            }
+//        }
     }
 }
