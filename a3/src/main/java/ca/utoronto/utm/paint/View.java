@@ -130,12 +130,18 @@ public class View implements EventHandler<ActionEvent> {
         System.out.println(((MenuItem) event.getSource()).getText());
         String command = ((MenuItem) event.getSource()).getText();
 
-        // Access the Downloads Folder (no matter the OS):
-        String downloadsPath = System.getProperty("user.home") + File.separator + "Downloads";
-        File downloadsFolder = new File(downloadsPath);
-        // Fallback to the Home directory if the Downloads folder doesn't exist:
-        if (!downloadsFolder.exists() || !downloadsFolder.isDirectory()) {
-            downloadsFolder = new File(System.getProperty("user.home"));
+        // Set the default initial directory to the user's home folder:
+        File homeFolder;
+        // For some reason if <user.home> is not correctly set or misconfigured, or if the OS has no home directory:
+        try {
+            homeFolder = new File(System.getProperty("user.home"));
+            if (!homeFolder.exists() || !homeFolder.isDirectory()) {
+                throw new Exception("Home directory not valid.");
+            }
+        } catch (Exception e) {
+            // Fallback to the root directory as a last resort:
+            homeFolder = new File(File.separator);
+            System.out.println("Failed to find home directory, falling back to root directory.");
         }
 
         if (command.equals("Open")) {
@@ -143,7 +149,7 @@ public class View implements EventHandler<ActionEvent> {
 
             // Set the title and file extension type:
             fc.setTitle("Open Paint File");
-            fc.setInitialDirectory(downloadsFolder);
+            fc.setInitialDirectory(homeFolder);
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
@@ -172,7 +178,7 @@ public class View implements EventHandler<ActionEvent> {
 
             // Set the title and file extension type:
             fc.setTitle("Save Paint File");
-            fc.setInitialDirectory(downloadsFolder);
+            fc.setInitialDirectory(homeFolder);
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
