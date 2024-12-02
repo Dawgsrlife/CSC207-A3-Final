@@ -97,7 +97,7 @@ public class OllamaPaint extends Ollama {
         String prompt = null;
 
         prompt = "Draw a 100 by 120 rectangle with 4 radius 5 circles at each rectangle corner.";
-        OllamaPaint op = new OllamaPaint("dh2010pcXX.utm.utoronto.ca"); // Replace this with your assigned Ollama server.
+        OllamaPaint op = new OllamaPaint("dh2010pc42.utm.utoronto.ca"); // Replace this with your assigned Ollama server.
 
         prompt = "Draw a 100 by 120 rectangle with 4 radius 5 circles at each rectangle corner.";
         op.newFile(prompt, "OllamaPaintFile1.txt");

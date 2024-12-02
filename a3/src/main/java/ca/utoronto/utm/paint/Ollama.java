@@ -14,8 +14,8 @@ import java.net.URL;
 // https://www.llama.com/docs/model-cards-and-prompt-formats/meta-llama-3/
 
 public abstract class Ollama {
-    private String host = "dh2010pcXX.utm.utoronto.ca";
-    private String url = "http://dh2010pcXX.utm.utoronto.ca:11434/api/generate";
+    private String host = "dh2010pc42.utm.utoronto.ca";
+    private String url = "http://dh2010pc42.utm.utoronto.ca:11434/api/generate";
 
     public Ollama(String host) {
         this.host = host;
