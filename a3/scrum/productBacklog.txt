@@ -64,11 +64,11 @@ ISSUE    : Save generates a redundant colon (":") character after "points"
            for Squiggle and Polyline.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.3 : mengale1 : STATUS : InProgress
+TYPE     : USER STORY 3.3 : mengale1 : STATUS : Complete
 NAME     : Load
 OWNER    : mengale1
 PRIORITY : 2
-ESTIMATE : 2 hours    ACTUAL :
+ESTIMATE : 2 hours    ACTUAL : 3 hours
 AS A     : user
 ISSUE    : the ability to open previously saved Paint programs. A file dialog
 should appear, allowing me to choose the file to load. If the file is not in
