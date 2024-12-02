@@ -74,8 +74,8 @@ public class RectangleCommand extends PaintCommand {
         details = details.substring (startIndex);
         sb.append(details);
 
-        sb.append("\tp1:").append(this.getP1().x).append(",").append(this.getP1().y).append("\n");
-        sb.append("\tp2:").append(this.getP2().x).append(",").append(this.getP2().y).append("\n");
+        sb.append("\tp1:(").append(this.getP1().x).append(",").append(this.getP1().y).append(")\n");
+        sb.append("\tp2:(").append(this.getP2().x).append(",").append(this.getP2().y).append(")\n");
         sb.append("End Rectangle\n");
 
         return sb.toString();
