@@ -12,7 +12,10 @@ public class OllamaPaint extends Ollama {
      * @param outFileName name of new file to be created in users home directory
      */
     public void newFile(String prompt, String outFileName) {
-        // YOUR CODE GOES HERE
+        String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
+        String system = "The answer to this question should be a PaintSaveFileFormat Document. Respond only with a PaintSaveFileFormat Document and nothing else. " + format;
+        String response = this.call(system, prompt);
+        FileIO.writeHomeFile(response, outFileName);
     }
 
     /**
@@ -23,11 +26,16 @@ public class OllamaPaint extends Ollama {
      * @param outFileName name of new file to be created in users home directory
      */
     public void modifyFile(String prompt, String inFileName, String outFileName) {
-        // YOUR CODE GOES HERE
         // Your job is to create the right system and prompt.
         // then call Ollama and write the new file in the home directory
         // HINT: You should have a collection of resources, examples, prompt wrapper etc. available
         // in the resources directory. See OllamaNumberedFile as an example.
+        String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
+        String system = "The answer to this question should be a PaintSaveFileFormat Document. Respond only with a PaintSaveFileFormat Document and nothing else. " + format;
+        String f = FileIO.readResourceFile(inFileName);
+        String fullPrompt = "Produce a new PaintSaveFileFormat Document, resulting from the following OPERATION being performed on the following PaintSaveFileFormat Document. OPERATION START" + prompt + " OPERATION END " + f;
+        String response = this.call(system, fullPrompt);
+        FileIO.writeHomeFile(response, outFileName);
     }
 
     /**
