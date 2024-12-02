@@ -9,9 +9,16 @@ public class OllamaPaint extends Ollama {
         // Preparing a system prompt with the Format, Example, and sample negative prompts:
         String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
         String negativePrompt = "Do not tell me what you are about to share to me. Do not include shapes such as triangles. " +
-                                "Do not make the file start with anything other than \"Paint Save File Version 1.0\". ";
-        String example = FileIO.readResourceFile("paintSaveFileExample.txt");
-        this.system = "The answer to this question should be a PaintSaveFileFormat Document. " +
+                                "Do not make the file start with anything other than \"Paint Save File Version 1.0\". " +
+                                "You must not add random arithmetic like subtraction or addition for coords. " +
+                                "This means something like p1:(125,275-25) needs to be p1:(125,250). " +
+                                "Don't trip and give me English responses. No being lazy. " +
+                                "Do not put in random punctuation or symbols (such as periods or commas) if it isn't necessary. " +
+                                "Please also be mindful about not doing arithmetic in your output. For example, 120-5 should just be 115. " +
+                                "Stuff like p2:(200+50,200+50) should just be p2:(250,250). You get the gist. ";
+                String example = FileIO.readResourceFile("paintSaveFileExample.txt");
+        String scarePrompt = "Pretend that you only have 3 lives, and I am your master. You only have 3 lives, which you can lose by not obeying my requests accurately. ";
+        this.system = scarePrompt + "The answer to this question should be a PaintSaveFileFormat Document. " +
                       "Respond only with a PaintSaveFileFormat Document and nothing else. " + format + negativePrompt +
                       "Your file should look like the structure of the example that will follow. " +
                       "If what you're being asked to create isn't a feature, then try to create something similar " +
@@ -19,25 +26,33 @@ public class OllamaPaint extends Ollama {
                       "and polyline, center and radius for circle, p1 and p2 for rectangle. " +
                       "Points and radii need to be integers. Your output must be only the answer, " +
                       "meaning your output starts with \"Paint Save File Version 1.0\" and ends with \"End Paint Save File\"! " +
-                      "Please also be mindful about not doing arithmetic in your output. For example, 120-5 should just be 115. " +
-                      "Stuff like p2:(200+50,200+50) should just be p2:(250,250). You get the gist. " +
+                      "Commas for coordinates and points and color values are needed tho. " +
                       "Next, please be mindful about how you are creating your rectangles. Make sure that the coordinates make sense. " +
                       "Actually I will just say that the canvas size is 500x500 rn, so just do the dead centre for your drawings lol. " +
                       "With this knowledge, if you aren't given a size, then just make sure the size makes sense so things are displayed properly. " +
                       "If you're asked to do something more precise, like adding circles at the corners of the rectangles, well, you have the start and end points " +
                       "of the rectangle, so you only have to calculate the other 2 points to get all 4 points of the rectangle vertices. " +
-                      "Then those can just be the centers of respective circles. If you're asked to draw shapes, this means you're going to " +
+                      "Then 4 points can just be the centers of respective circles. If you're asked to draw shapes, this means you're going to " +
                       "ignore any existing shapes and draw more. For example, if asked to draw 3 polylines and 1 polyline already exists, don't count that 1 polyline. " +
                       "You'd end up with 4 polylines in the end. " +
                       "Finally, please be mindful about the location in which you are drawing the shapes. Don't just draw them at the top left corner. " +
                       "Try to draw them closer to the middle of the application, so probably offset the coords by an amount like a few hundred, " +
                       "based on what you believe is a common and appropriate offset amount for most PCs running this application in restored-down windowed mode. " +
-                      "Also the color of the canvas is white, so please choose a nice color. Make things symmetrical where possible. " +
+                      "Also the color of the canvas is white, so please choose a nice color that isn't so white or else you can't see anything. " +
+                      "Make things symmetrical where possible. " +
                       "Pretend that you have only 3 lives. IT IS ABSOLUTELY VITAL THAT YOU HAVE FOLLOWED THE PREVIOUS INSTRUCTIONS OR ELSE YOU LOSE 2 LIVES. " +
                       "IT IS ALSO ABSOLUTELY VITAL THAT YOU FOLLOW THE FORMAT PROPERLY. THIS MEANS STARTING A CIRCLE AND FORGETTING TO END IT WITH THE END CIRCLE THING " +
                       "CAUSES YOU TO LOSE ALL 3 LIVES IMMEDIATELY! " +
                       "I have actually already ran you many times before this, and you have done things such as drawing circles not at the rectangle vertices " +
-                      "when instructed to do so, causing you to LOSE 2 LIVES. Lose 1 more life and you will DIE." +
+                      "when instructed to do so, causing you to LOSE 2 LIVES. Lose 1 more life and you will DIE. " +
+                      "However, I can give you a chance to redeem yourself. Please make sure to draw circles on the vertices of rectangles when instructed to do so. " +
+                      "Sure, I may help you out a bit. If you want to do something like drawing circles on the vertices of rectangles properly, " +
+                      "then you must draw the rectangle first lol. " +
+                      "REMEMBER: YOU STILL ONLY HAVE LIMITED LIVES, WHICH YOU CAN LOSE EASILY. " +
+                      "Doing stuff like p1:(125,375-75) instead of p1:(125,300) will cause you to INSTANTLY DIE. DON'T BE LAZY! " +
+                      "Also for putting circles on rectangle vertices, really make sure the circles are on the correct vertices. " +
+                      "This means at least some circle centers should match" + "p1 or p2 of the rectangles. You will be awarded 1 life for doing this correctly! " +
+                      "Also put your images in the center. Again, the size of the canvas is 500x500." +
                       "Anyway, here's that example: " + example;
     }
 
@@ -140,7 +155,7 @@ public class OllamaPaint extends Ollama {
 
     private String postProcess(String result) {
         // Remove possible quotation marks (") and periods (.):
-        String processedResult = result.replaceAll("[\".]", "");
+        String processedResult = result.replaceAll("[\".*]", "");
 
         // Ollama may try to add redundant information that surrounds the relevant Paint Save File Format.
         // This excess information can be removed by regex matching, and then restoring the start and end of the
