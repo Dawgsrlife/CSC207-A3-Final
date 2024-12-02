@@ -45,7 +45,7 @@ You can find the format of the save file in the
 project under paintSaveFileFormat.txt.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : BUG 3.21 : mengale1 : STATUS : InProgress
+TYPE     : BUG 3.21 : mengale1 : STATUS : Complete
 NAME     : Small Error on Paint Save File Format
 OWNER    : mengale1
 PRIORITY : 3
