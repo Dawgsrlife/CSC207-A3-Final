@@ -9,63 +9,25 @@ public class OllamaPaint extends Ollama {
     public OllamaPaint(String host) {
         super(host);
 
-        // Preparing a system prompt with the Format, Example, and sample negative prompts:
+        // Preparing a system prompt with Format, Example, and Constraints:
         String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
-        String negativePrompt = "Do not tell me what you are about to share to me. Do not include shapes such as triangles. " +
-                                "Do not make the file start with anything other than \"Paint Save File Version 1.0\". " +
-                                "You must not add random arithmetic like subtraction or addition for coords. " +
-                                "This means something like p1:(125,275-25) needs to be p1:(125,250). " +
-                                "To do this you simply have to think of 125 as the x-coordinate and 275-25 as the y-coordinate, " +
-                                "but that y-coord is actually just 250" +
-                                "Don't trip and give me English responses. No being lazy. " +
-                                "Do not put in random punctuation or symbols (such as periods or commas or brackets) if it isn't necessary. " +
-                                "Please also be mindful about not doing arithmetic in your output. For example, 120-5 should just be 115. " +
-                                "Stuff like p2:(200+50,200+50) should just be p2:(250,250). You get the gist. " +
-                                "Do not randomly generate extra shapes. If you are asked to replace circles into rectangles, don't make another rectangle appear randomly. " +
-                                "Please do not cover up the shapes if it means you'll be overlapping them fully with filled shapes. " +
-                                "Don't make rectangles so skinny! Please be precise with your circle placements. ";
         String example = FileIO.readResourceFile("paintSaveFileExample.txt");
-        String scarePrompt = "Pretend that you only have 3 lives, and I am your master. You only have 3 lives, which you can lose by not obeying my requests accurately. ";
-        this.system = scarePrompt + "The answer to this question should be a PaintSaveFileFormat Document. " +
-                      "Respond only with a PaintSaveFileFormat Document and nothing else. " + format + negativePrompt +
-                      "Your file should look like the structure of the example that will follow. " +
-                      "If what you're being asked to create isn't a feature, then try to create something similar " +
-                      "that is still within the valid features: color and filled for all shapes, points for squiggle " +
-                      "and polyline, center and radius for circle, p1 and p2 for rectangle. " +
-                      "Points and radii need to be integers. Your output must be only the answer, " +
-                      "meaning your output starts with \"Paint Save File Version 1.0\" and ends with \"End Paint Save File\"! " +
-                      "Commas for coordinates and points and color values are needed tho. " +
-                      "Next, please be mindful about how you are creating your rectangles. Make sure that the coordinates make sense. " +
-                      "Actually I will just say that the canvas size is 500x500 rn, so just do the dead centre for your drawings lol. " +
-                      "With this knowledge, if you aren't given a size, then just make sure the size makes sense so things are displayed properly. " +
-                      "If you're asked to do something more precise, like adding circles at the corners of the rectangles, well, you have the start and end points " +
-                      "of the rectangle, so you only have to calculate the other 2 points to get all 4 points of the rectangle vertices. " +
-                      "Then 4 points can just be the centers of respective circles. If you're asked to draw shapes, this means you're going to " +
-                      "ignore any existing shapes and draw more. For example, if asked to draw 3 polylines and 1 polyline already exists, don't count that 1 polyline. " +
-                      "You'd end up with 4 polylines in the end. " +
-                      "Finally, please be mindful about the location in which you are drawing the shapes. Don't just draw them at the top left corner. " +
-                      "Try to draw them closer to the middle of the application, so probably offset the coords by an amount like a few hundred, " +
-                      "based on what you believe is a common and appropriate offset amount for most PCs running this application in restored-down windowed mode. " +
-                      "Also the color of the canvas is white, so please choose a nice color that isn't so white or else you can't see anything. " +
-                      "Make things symmetrical where possible. " +
-                      "Pretend that you have only 3 lives. IT IS ABSOLUTELY VITAL THAT YOU HAVE FOLLOWED THE PREVIOUS INSTRUCTIONS OR ELSE YOU LOSE 2 LIVES. " +
-                      "IT IS ALSO ABSOLUTELY VITAL THAT YOU FOLLOW THE FORMAT PROPERLY. THIS MEANS STARTING A CIRCLE AND FORGETTING TO END IT WITH THE END CIRCLE THING " +
-                      "CAUSES YOU TO LOSE ALL 3 LIVES IMMEDIATELY! " +
-                      "I have actually already ran you many times before this, and you have done things such as drawing circles not at the rectangle vertices " +
-                      "when instructed to do so, causing you to LOSE 2 LIVES. Lose 1 more life and you will DIE. " +
-                      "However, I can give you a chance to redeem yourself. Please make sure to draw circles on the vertices of rectangles when instructed to do so. " +
-                      "Sure, I may help you out a bit. If you want to do something like drawing circles on the vertices of rectangles properly, " +
-                      "then you must draw the rectangle first lol. " +
-                      "REMEMBER: YOU STILL ONLY HAVE LIMITED LIVES, WHICH YOU CAN LOSE EASILY. " +
-                      "Doing stuff like p1:(125,375-75) instead of p1:(125,300) will cause you to INSTANTLY DIE. DON'T BE LAZY! " +
-                      "Also for putting circles on rectangle vertices, really make sure the circles are on the correct vertices. " +
-                      "E.g. If you're asked to draw 4 circles at the the corners of a rectangle, then two of the circles need to be " +
-                      "having the same center as the point p1 and p2 respectively, and the other two can be calculated " +
-                      "by mixing and matching the x and y values CORRECTLY. Let's say we have p1 is coords a, b and p2 is coords c, d. " +
-                      "Then two of the circles need to have center point being a, b and c, d, and the other two circles would have center point c, b and a, d. " +
-                      "You will be awarded 1 life for doing this correctly! MAKE SURE YOU ARE FOLLOWING THIS TEACHING OR ELSE YOU LOSE ALL 3 LIVES! " +
-                      "Also put your images in the center. Again, the size of the canvas is 500x500." +
-                      "Anyway, here's that example: " + example;
+        String constraints = "Do not include English explanations or unnecessary punctuation. "
+                + "Do not forget to end your shapes after starting them. "
+                + "Do not write in-line comments. "
+                + "Avoid arithmetic expressions in coordinates (e.g., 275-25 should be 250). "
+                + "Shapes should follow specified formats: circles need integer center/radius; rectangles use p1:(x,y) and p2:(x,y). "
+                + "The canvas colour is white; use darker colours for visibility, and avoid completely overlapping filled shapes. "
+                + "The canvas size is 500x500; center drawings unless otherwise specified. "
+                + "Do not create incredibly tiny shapes (e.g. avoid skinny rectangles). "
+                + "Ensure proper placement, alignment, and symmetry for all shapes. "
+                + "Avoid randomly generating shapes or modifying existing shapes unless explicitly requested. "
+                + "Ensure outputs strictly follow the format, starting with 'Paint Save File Version 1.0' "
+                + "and ending with 'End Paint Save File'.";
+        String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates) will cost lives. "
+                + "Losing all lives ends the process. Follow instructions carefully.";
+
+        this.system = warnings + "\n" + format + "\n" + constraints + "\n" + "Example:\n" + example;
     }
 
     /**
@@ -96,72 +58,86 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * newFile1:
+     * newFile1: Create a 3x3 grid of rectangles with alternating colors
      *
-     * @param outFileName the name of the new file in the users home directory
+     * @param outFileName The name of the new file in the user's home directory
      */
     @Override
     public void newFile1(String outFileName) {
-        String prompt = "Create a Paint file with a grid layout of 3x3 rectangles, each 50x50 in size, with alternating colors.";
+        String prompt = "Create a Paint file consisting of a grid layout of 3x3 rectangles. " +
+                "Each rectangle should be 50x50 in size, with alternating red and blue colors. " +
+                "Place the first rectangle at position (50,50), the second at (150,50), and so on. " +
+                "Ensure the rectangles are aligned in a 3x3 grid pattern. The canvas size should be centered, and all shapes should be visible on the canvas.";
         newFile(prompt, outFileName);
     }
 
     /**
-     * newFile2:
+     * newFile2: Create a Paint file with circles centered at the corners of a rectangle
      *
-     * @param outFileName the name of the new file in the users home directory
+     * @param outFileName The name of the new file in the user's home directory
      */
     @Override
     public void newFile2(String outFileName) {
-        String prompt = "Draw 10 circles in a vertical line with increasing radius, each circle a different shade of blue.";
+        String prompt = "Create a Paint file with a rectangle at position (150,150) with dimensions 200x100. " +
+                "Place four circles at the four corners of the rectangle. " +
+                "Each circle should have a radius of 10, and the circles must be positioned precisely at the corners of the rectangle. " +
+                "Ensure that the circles are clearly placed on the rectangle vertices, with their centers at (150,150), (350,150), (150,250), and (350,250).";
         newFile(prompt, outFileName);
     }
 
     /**
-     * newFile3:
+     * newFile3: Create a Paint file with a single polyline shape
      *
-     * @param outFileName the name of the new file in the users home directory
+     * @param outFileName The name of the new file in the user's home directory
      */
     @Override
     public void newFile3(String outFileName) {
-        String prompt = "Create an abstract pattern of overlapping rectangles and circles with random colors.";
+        String prompt = "Create a Paint file containing a polyline shape connecting the points (100,100), (200,200), and (300,100). " +
+                "Ensure the polyline is drawn as a continuous path between these three points. " +
+                "The polyline should have no fill and no stroke, creating a clean, open shape. " +
+                "Position the polyline in the center of the canvas, ensuring that it is fully visible.";
         newFile(prompt, outFileName);
     }
 
     /**
-     * modifyFile1: MODIFY inFileName TO PRODUCE outFileName BY
+     * modifyFile1: Modify an existing Paint file by adding a rectangle
      *
-     * @param inFileName  the name of the source file in the users home directory
-     * @param outFileName the name of the new file in the users home directory
+     * @param inFileName  The source Paint file to be modified
+     * @param outFileName The name of the new file in the user's home directory
      */
     @Override
     public void modifyFile1(String inFileName, String outFileName) {
-        String prompt = "Add a shadow effect to every shape in the Paint file.";
+        String prompt = "Modify the existing Paint file by adding a rectangle with dimensions 100x100 at position (50,50). " +
+                "Ensure that the rectangle is drawn with a filled color, and make sure the new rectangle does not overlap with any existing shapes. " +
+                "Place the rectangle closer to the center of the canvas for balanced composition.";
         modifyFile(prompt, inFileName, outFileName);
     }
 
     /**
-     * modifyFile2: MODIFY inFileName TO PRODUCE outFileName BY
-     * to have rounded corners.
+     * modifyFile2: Modify an existing Paint file by changing the color of all rectangles to green
      *
-     * @param inFileName  the name of the source file in the users home directory
-     * @param outFileName the name of the new file in the users home directory
+     * @param inFileName  The source Paint file to be modified
+     * @param outFileName The name of the new file in the user's home directory
      */
     @Override
     public void modifyFile2(String inFileName, String outFileName) {
-        String prompt = "Convert all shapes in the Paint file to have rounded corners.";
+        String prompt = "Modify the existing Paint file by changing the color of all rectangles to green. " +
+                "Ensure that no other shapes are affected, and all rectangles should now appear in the green color. " +
+                "Ensure that the rectangles' positions and sizes remain unchanged while applying the color transformation.";
         modifyFile(prompt, inFileName, outFileName);
     }
 
     /**
-     * modifyFile3: MODIFY inFileName TO PRODUCE outFileName BY
+     * modifyFile3: Modify an existing Paint file by deleting all circles
      *
-     * @param inFileName  the name of the source file in the users home directory
-     * @param outFileName the name of the new file in the users home directory
+     * @param inFileName  The source Paint file to be modified
+     * @param outFileName The name of the new file in the user's home directory
      */
     @Override
     public void modifyFile3(String inFileName, String outFileName) {
-        String prompt = "Change all shapes in the Paint file to be some shade of red.";
+        String prompt = "Modify the existing Paint file by removing all circles. " +
+                "Ensure that no circles remain in the modified file, and that all other shapes and content are preserved intact. " +
+                "The final file should have no circles, but should retain any other existing shapes like rectangles or polylines.";
         modifyFile(prompt, inFileName, outFileName);
     }
 
@@ -207,40 +183,59 @@ public class OllamaPaint extends Ollama {
         String operator = matcher.group(2);                 // grab operator (+ or -)
         int operand2 = Integer.parseInt(matcher.group(3));  // grab second num
 
-        // Do correct computation:
+        // Do correct computation (either + or -):
         return "+".equals(operator) ? operand1 + operand2 : operand1 - operand2;
     }
 
+    /**
+     * File Outputs:
+     * - OllamaPaintFile1.txt is a rectangle with circles on its vertices;
+     * - OllamaPaintFile2.txt is OllamaPaintFile1.txt but only with the circles;
+     * - OllamaPaintFile3.txt is five different-colored concentric circles;
+     * - OllamaPaintFile4.txt is OllamaPaintFile3.txt but with the circles as rectangles;
+     * - OllamaPaintFile5.txt is a canvas with a four polylines, two circles, and one rectangle;
+     * - OllamaPaintFile6.txt is OllamaPaintFile5.txt but with each circle surrounded by a non-filled rectangle.
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         String prompt;
 
         OllamaPaint op = new OllamaPaint("dh2010pc42.utm.utoronto.ca"); // Replace this with your assigned Ollama server.
 
+        // One
         prompt = "Draw a 100 by 120 rectangle with 4 radius 5 circles at each rectangle corner.";
         op.newFile(prompt, "OllamaPaintFile1.txt");
+
+        // Two
         op.modifyFile("Remove all shapes except for the circles.", "OllamaPaintFile1.txt", "OllamaPaintFile2.txt");
 
+        // Three
         prompt = "Draw 5 concentric circles with different colors.";
         op.newFile(prompt, "OllamaPaintFile3.txt");
+
+        // Four
         op.modifyFile("Change all circles into rectangles.", "OllamaPaintFile3.txt", "OllamaPaintFile4.txt");
 
+        // Five
         prompt = "Draw a polyline then two circles then a rectangle then 3 polylines all with different colors.";
-        op.newFile(prompt, "OllamaPaintFile4.txt");
+        op.newFile(prompt, "OllamaPaintFile5.txt");
 
-//        prompt = "Modify the following Paint Save File so that each circle is surrounded by a non-filled rectangle. ";
-        op.modifyFile("Change all circles into rectangles.", "OllamaPaintFile4.txt", "OllamaPaintFile5.txt");
+        // Six
+        prompt = "Modify the following Paint Save File so that each circle is surrounded by a non-filled rectangle. ";
+        op.modifyFile(prompt, "OllamaPaintFile5.txt", "OllamaPaintFile6.txt");
 
-        for (int i = 1; i <= 3; i++) {
-            op.newFile1("PaintFile1_" + i + ".txt");
-            op.newFile2("PaintFile2_" + i + ".txt");
-            op.newFile3("PaintFile3_" + i + ".txt");
-        }
-        for (int i = 1; i <= 3; i++) {
-            for (int j = 1; j <= 3; j++) {
-                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
-                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
-                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
-            }
-        }
+//        for (int i = 1; i <= 3; i++) {
+//            op.newFile1("PaintFile1_" + i + ".txt");
+//            op.newFile2("PaintFile2_" + i + ".txt");
+//            op.newFile3("PaintFile3_" + i + ".txt");
+//        }
+//        for (int i = 1; i <= 3; i++) {
+//            for (int j = 1; j <= 3; j++) {
+//                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
+//                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
+//                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
+//            }
+//        }
     }
 }
