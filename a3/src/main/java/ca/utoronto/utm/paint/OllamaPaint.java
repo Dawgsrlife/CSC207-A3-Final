@@ -1,5 +1,8 @@
 package ca.utoronto.utm.paint;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class OllamaPaint extends Ollama {
     private final String system;
 
@@ -12,11 +15,16 @@ public class OllamaPaint extends Ollama {
                                 "Do not make the file start with anything other than \"Paint Save File Version 1.0\". " +
                                 "You must not add random arithmetic like subtraction or addition for coords. " +
                                 "This means something like p1:(125,275-25) needs to be p1:(125,250). " +
+                                "To do this you simply have to think of 125 as the x-coordinate and 275-25 as the y-coordinate, " +
+                                "but that y-coord is actually just 250" +
                                 "Don't trip and give me English responses. No being lazy. " +
                                 "Do not put in random punctuation or symbols (such as periods or commas or brackets) if it isn't necessary. " +
                                 "Please also be mindful about not doing arithmetic in your output. For example, 120-5 should just be 115. " +
-                                "Stuff like p2:(200+50,200+50) should just be p2:(250,250). You get the gist. ";
-                String example = FileIO.readResourceFile("paintSaveFileExample.txt");
+                                "Stuff like p2:(200+50,200+50) should just be p2:(250,250). You get the gist. " +
+                                "Do not randomly generate extra shapes. If you are asked to replace circles into rectangles, don't make another rectangle appear randomly. " +
+                                "Please do not cover up the shapes if it means you'll be overlapping them fully with filled shapes. " +
+                                "Don't make rectangles so skinny! Please be precise with your circle placements. ";
+        String example = FileIO.readResourceFile("paintSaveFileExample.txt");
         String scarePrompt = "Pretend that you only have 3 lives, and I am your master. You only have 3 lives, which you can lose by not obeying my requests accurately. ";
         this.system = scarePrompt + "The answer to this question should be a PaintSaveFileFormat Document. " +
                       "Respond only with a PaintSaveFileFormat Document and nothing else. " + format + negativePrompt +
@@ -55,7 +63,7 @@ public class OllamaPaint extends Ollama {
                       "having the same center as the point p1 and p2 respectively, and the other two can be calculated " +
                       "by mixing and matching the x and y values CORRECTLY. Let's say we have p1 is coords a, b and p2 is coords c, d. " +
                       "Then two of the circles need to have center point being a, b and c, d, and the other two circles would have center point c, b and a, d. " +
-                      "You will be awarded 1 life for doing this correctly! " +
+                      "You will be awarded 1 life for doing this correctly! MAKE SURE YOU ARE FOLLOWING THIS TEACHING OR ELSE YOU LOSE ALL 3 LIVES! " +
                       "Also put your images in the center. Again, the size of the canvas is 500x500." +
                       "Anyway, here's that example: " + example;
     }
@@ -88,7 +96,7 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * newFile1: Creates a Paint File with basic shapes in a grid layout.
+     * newFile1:
      *
      * @param outFileName the name of the new file in the users home directory
      */
@@ -99,7 +107,7 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * newFile2: Creates a Paint File with circles of increasing radius, where each circle is a different shade of blue.
+     * newFile2:
      *
      * @param outFileName the name of the new file in the users home directory
      */
@@ -110,18 +118,18 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * newFile3: Creates a Paint File with a geometric art pattern.
+     * newFile3:
      *
      * @param outFileName the name of the new file in the users home directory
      */
     @Override
     public void newFile3(String outFileName) {
-        String prompt = "Create an abstract pattern of overlapping triangles and circles with random colors.";
+        String prompt = "Create an abstract pattern of overlapping rectangles and circles with random colors.";
         newFile(prompt, outFileName);
     }
 
     /**
-     * modifyFile1: MODIFY inFileName TO PRODUCE outFileName adding a shadow effect to all shapes.
+     * modifyFile1: MODIFY inFileName TO PRODUCE outFileName BY
      *
      * @param inFileName  the name of the source file in the users home directory
      * @param outFileName the name of the new file in the users home directory
@@ -133,7 +141,7 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * modifyFile2: MODIFY inFileName TO PRODUCE outFileName BY converting all shapes in the file
+     * modifyFile2: MODIFY inFileName TO PRODUCE outFileName BY
      * to have rounded corners.
      *
      * @param inFileName  the name of the source file in the users home directory
@@ -146,7 +154,7 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * modifyFile3: MODIFY inFileName TO PRODUCE outFileName BY changing all shapes to have some shade of red.
+     * modifyFile3: MODIFY inFileName TO PRODUCE outFileName BY
      *
      * @param inFileName  the name of the source file in the users home directory
      * @param outFileName the name of the new file in the users home directory
@@ -168,8 +176,39 @@ public class OllamaPaint extends Ollama {
         processedResult = processedResult.replaceAll(startOrEndRegex, "");
         processedResult = "Paint Save File Version 1.0\n" + processedResult + "\nEnd Paint Save File\n";
 
+        // Ollama may still provide the arithmetic version of points, so it's necessary to capture and replace
+        // instances of that with the computed result.
+        Pattern arithmeticPattern = Pattern.compile("-?\\b(-?\\d+)([+-])(\\d+)\\b");
+        processedResult = getStringBuffer(arithmeticPattern, processedResult).toString();
+        
         // Return the result:
         return processedResult.trim();
+    }
+
+    private static StringBuffer getStringBuffer(Pattern arithmeticPattern, String processedResult) {
+        Matcher matcher = arithmeticPattern.matcher(processedResult);
+
+        // Doing the replacement of arithmetic expressions with computed values:
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            int computedValue = getComputedValue(matcher);
+
+            // Do replacement:
+            matcher.appendReplacement(sb, computedValue + "");
+        }
+        matcher.appendTail(sb);
+        return sb;
+    }
+
+    private static int getComputedValue(Matcher matcher) {
+        boolean firstNumNegative = matcher.group(0).startsWith("-");
+        int operand1 = Integer.parseInt(matcher.group(1));  // grab first num
+        if (firstNumNegative) operand1 = -operand1;
+        String operator = matcher.group(2);                 // grab operator (+ or -)
+        int operand2 = Integer.parseInt(matcher.group(3));  // grab second num
+
+        // Do correct computation:
+        return "+".equals(operator) ? operand1 + operand2 : operand1 - operand2;
     }
 
     public static void main(String[] args) {
@@ -191,17 +230,17 @@ public class OllamaPaint extends Ollama {
 //        prompt = "Modify the following Paint Save File so that each circle is surrounded by a non-filled rectangle. ";
         op.modifyFile("Change all circles into rectangles.", "OllamaPaintFile4.txt", "OllamaPaintFile5.txt");
 
-//        for (int i = 1; i <= 3; i++) {
-//            op.newFile1("PaintFile1_" + i + ".txt");
-//            op.newFile2("PaintFile2_" + i + ".txt");
-//            op.newFile3("PaintFile3_" + i + ".txt");
-//        }
-//        for (int i = 1; i <= 3; i++) {
-//            for (int j = 1; j <= 3; j++) {
-//                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
-//                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
-//                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
-//            }
-//        }
+        for (int i = 1; i <= 3; i++) {
+            op.newFile1("PaintFile1_" + i + ".txt");
+            op.newFile2("PaintFile2_" + i + ".txt");
+            op.newFile3("PaintFile3_" + i + ".txt");
+        }
+        for (int i = 1; i <= 3; i++) {
+            for (int j = 1; j <= 3; j++) {
+                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
+                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
+                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
+            }
+        }
     }
 }
