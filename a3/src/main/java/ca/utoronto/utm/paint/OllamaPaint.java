@@ -30,6 +30,9 @@ public class OllamaPaint extends Ollama {
                 + "Do not end shapes before starting them. "
                 + "Be very careful to avoid mistakes with the format. Take your time in generation. "
                 + "Do not accidentally put brackets where they don't belong (e.g. \"(point:(349,25)\" should just be \"point:(349,25)\"). "
+                + "Do not do use incorrect formats for shapes (e.g. \"Non-filledRectangle(forthecircle)\" should just be \"Rectangle\"); no need to be descriptive. "
+                + "Do not use the grave (`) symbol. Just provide the code. "
+                + "Do not do stuff like \"(removedsomelinesforbrevity)\". Just complete the file with all the shapes in the correct format. "
                 + "Ensure outputs strictly follow the format, starting with 'Paint Save File Version 1.0' "
                 + "and ending with 'End Paint Save File'.";
         String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates, "
