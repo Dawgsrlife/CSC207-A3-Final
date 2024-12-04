@@ -35,8 +35,9 @@ public class OllamaPaint extends Ollama {
         String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates, "
                 + "not putting stuff in the center of the canvas, not ending shapes) will cost lives. "
                 + "Losing all lives ends the process. Follow instructions carefully.";
+        String specific_example = FileIO.readResourceFile("concentric_circles.txt");
 
-        this.system = warnings + "\n" + format + "\n" + constraints + "\n" + "Example:\n" + example;
+        this.system = warnings + "\n" + format + "\n" + constraints + "\nExample:\n" + example + "\nConcentric Circles Example:\n" + specific_example;
     }
 
     /**
@@ -117,6 +118,7 @@ public class OllamaPaint extends Ollama {
                         See the examples:
                         
                         """ + example1 + "\n\nAnother example:" + example2;
+        newFile(prompt, outFileName);
     }
 
 
