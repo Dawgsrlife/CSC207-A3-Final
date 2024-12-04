@@ -34,7 +34,9 @@ public class OllamaPaint extends Ollama {
                 + "Do not use the grave (`) symbol. Just provide the code. "
                 + "Do not do stuff like \"(removedsomelinesforbrevity)\". Just complete the file with all the shapes in the correct format. "
                 + "Ensure outputs strictly follow the format, starting with 'Paint Save File Version 1.0' "
-                + "and ending with 'End Paint Save File'.";
+                + "and ending with 'End Paint Save File'. It is also vital that you end circle, polyline, rectangle, or squiggle, if you started them and they're not yet ended. "
+                + "Do not add any notes before or after the file. You are tasked with writing me output that CAN BE PARSED IMMEDIATELY, "
+                + "as if it is funneled directly into a paint program. There is no character limit. ";
         String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates, "
                 + "not putting stuff in the center of the canvas, not ending shapes) will cost lives. "
                 + "Losing all lives ends the process. Follow instructions carefully.";
@@ -120,7 +122,7 @@ public class OllamaPaint extends Ollama {
                         - Please see the example by the following (don't be lazy and give the verbatim format, but unique colours and make shapes aligned):
                         See the examples:
                         
-                        """ + example1 + "\n\nAnother example:" + example2;
+                        """;
         newFile(prompt, outFileName);
     }
 
@@ -160,7 +162,7 @@ public class OllamaPaint extends Ollama {
 
 
     /**
-     * modifyFile1: Add a watermark in a random quadrant of the canvas
+     * modifyFile1: Funny shapes! Every shape turns into some other shape.
      *
      * @param inFileName  The source Paint file to be modified
      * @param outFileName The name of the new file in the user's home directory
@@ -169,12 +171,10 @@ public class OllamaPaint extends Ollama {
     public void modifyFile1(String inFileName, String outFileName) {
         String prompt = """
                         Requirements:
-                            Add a 200 by 100 black rectangle near the bottom right of the canvas.
-                            Inside the rectangle, write the text "Proudly Created by Ollama :)" using Squiggles.
-                            Notice that P is just a vertical line with a rounded part on the right side.
-                            Do similar stuff to create the other letters.
-                                Text should be in white.
-                                Include a light-colored drop shadow using the squiggle.
+                            For every shape, change it into another shape.
+                            There are circles, rectangles, polylines, and squiggles available.
+                            Do not try to tell me what you are doing; just make the change.
+                            Shapes must not change into their own types (e.g. a circle shouldn't become another circle).
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
@@ -190,17 +190,17 @@ public class OllamaPaint extends Ollama {
     public void modifyFile2(String inFileName, String outFileName) {
         String prompt = """
                         Requirements:
-                            Invert the color of each shape (including squiggles):
-                                For each RGB color component (R, G, B), calculate its inverse as (255 - R, 255 - G, 255 - B).
-                                For example, if R = 5, G = 10, B = 15, then the new color should be 250,245,240.
-                                Apply the inversion to the fill color and stroke color of all shapes.
+                            For every shape, change its color to its inverse.
+                            To calculate this change, take the RGB values and subtract them from 255 to obtain the new value.
+                            For example, if you have "color:255,255,0", then you should do 255-255, 255-255, and 255-0 to obtain "color:0,0,255" as the new color.
+                            Write that in your output then.
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
 
 
     /**
-     * modifyFile3: Convert non-Squiggle shapes to Squiggles
+     * modifyFile3: Change everything to be super tiny.
      *
      * @param inFileName  The source Paint file to be modified
      * @param outFileName The name of the new file in the user's home directory
@@ -208,12 +208,7 @@ public class OllamaPaint extends Ollama {
     @Override
     public void modifyFile3(String inFileName, String outFileName) {
         String prompt = """
-                        Requirements:
-                            All shapes that are not squiggles should be converted into squiggles.
-                                Rectangles and circles: Approximate their boundaries using many points.
-                                    For filled shapes, use additional interior points to mimic the filled area.
-                                Ensure the squiggle maintains the shape's dimensions and color (including fill and stroke).
-                            This will require dynamically generating points to simulate complex shapes as squiggles.
+                        Scale all the shapes to be very small. Just follow the format.
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
