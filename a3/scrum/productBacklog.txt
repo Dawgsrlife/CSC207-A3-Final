@@ -119,7 +119,7 @@ Apply the Visitor Design Pattern to the save function. After this, the model
 will not implement the save function, so you should remove PaintModel.save.
 --------------------------------------------------------------------------
 --------------------------------------------------------------------------
-TYPE     : USER STORY 3.6 : mengale1 : STATUS : InProgress
+TYPE     : USER STORY 3.6 : mengale1 : STATUS : Complete
 NAME     : OllamaPaint
 OWNER    : mengale1
 PRIORITY : 3
