@@ -157,7 +157,7 @@ public class OllamaPaint extends Ollama {
 
 
     /**
-     * modifyFile1: TODO
+     * modifyFile1: Add a watermark in a random quadrant of the canvas
      *
      * @param inFileName  The source Paint file to be modified
      * @param outFileName The name of the new file in the user's home directory
@@ -165,15 +165,20 @@ public class OllamaPaint extends Ollama {
     @Override
     public void modifyFile1(String inFileName, String outFileName) {
         String prompt = """
-                        Add a circle (radius = 20) tangent to the top-right corner of the canvas. 
-                        The circle's center must be at (480,20). Ensure no other shapes are affected.
+                        Requirements:
+                        
+                            Randomly choose one quadrant of the canvas.
+                            Add a black rectangle to the chosen quadrant.
+                            Inside the rectangle, write the text "Proudly Created by Ollama :)":
+                                Text should be in white.
+                                Include a light-colored drop shadow using a squiggle effect.
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
 
 
     /**
-     * modifyFile2: TODO
+     * modifyFile2: Invert Colors of All Shapes
      *
      * @param inFileName  The source Paint file to be modified
      * @param outFileName The name of the new file in the user's home directory
@@ -181,15 +186,18 @@ public class OllamaPaint extends Ollama {
     @Override
     public void modifyFile2(String inFileName, String outFileName) {
         String prompt = """
-                        Change all shapes with red fill color to blue. 
-                        Maintain all other properties (size, position, etc.).
+                        Requirements:
+                        
+                            Invert the color of each shape (including squiggles):
+                                For each RGB color component (R, G, B), calculate its inverse as (255 - R, 255 - G, 255 - B).
+                                Apply the inversion to the fill color and stroke color of all shapes.
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
 
 
     /**
-     * modifyFile3: TODO
+     * modifyFile3: Convert non-Squiggle shapes to Squiggles
      *
      * @param inFileName  The source Paint file to be modified
      * @param outFileName The name of the new file in the user's home directory
@@ -197,8 +205,13 @@ public class OllamaPaint extends Ollama {
     @Override
     public void modifyFile3(String inFileName, String outFileName) {
         String prompt = """
-                        Replace all polylines with circles (radius = 10) centered at the midpoint of each polyline's starting and ending points. 
-                        Remove the polylines after the conversion.
+                        Requirements:
+                        
+                            All shapes that are not squiggles should be converted into squiggles.
+                                Rectangles and circles: Approximate their boundaries using many points.
+                                    For filled shapes, use additional interior points to mimic the filled area.
+                                Ensure the squiggle maintains the shape's dimensions and color (including fill and stroke).
+                            This will require dynamically generating points to simulate complex shapes as squiggles.
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
@@ -296,12 +309,12 @@ public class OllamaPaint extends Ollama {
             op.newFile2("PaintFile2_" + i + ".txt");
             op.newFile3("PaintFile3_" + i + ".txt");
         }
-//        for (int i = 1; i <= 3; i++) {
-//            for (int j = 1; j <= 3; j++) {
-//                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
-//                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
-//                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
-//            }
-//        }
+        for (int i = 1; i <= 3; i++) {
+            for (int j = 1; j <= 3; j++) {
+                op.modifyFile1("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_1.txt");
+                op.modifyFile2("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_2.txt");
+                op.modifyFile3("PaintFile" + i + "_" + j + ".txt", "PaintFile" + i + "_" + j + "_3.txt");
+            }
+        }
     }
 }
