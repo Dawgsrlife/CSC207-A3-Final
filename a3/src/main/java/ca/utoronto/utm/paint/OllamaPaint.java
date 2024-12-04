@@ -13,20 +13,25 @@ public class OllamaPaint extends Ollama {
         String format = FileIO.readResourceFile("paintSaveFileFormat.txt");
         String example = FileIO.readResourceFile("paintSaveFileExample.txt");
         String constraints = "Do not include English explanations or unnecessary punctuation. "
-                + "Do not forget to end your shapes after starting them. "
+                + "Do not forget to end your circle, rectangle, squiggle, or polyline shapes after starting them. "
                 + "Do not write in-line comments. "
                 + "Avoid arithmetic expressions in coordinates (e.g., 275-25 should be 250). "
                 + "Shapes should follow specified formats: circles need integer center/radius; rectangles use p1:(x,y) and p2:(x,y). "
                 + "The canvas colour is white; use darker colours for visibility, and avoid completely overlapping filled shapes. "
                 + "The canvas size is 500x500; center drawings unless otherwise specified. "
-                + "Please center the drawings and scale them to be relatively big. "
+                + "Please scale the drawings to be relatively big. "
+                + "Please center the drawings unless otherwise told. "
+                + "Please follow the examples accurately. They are great references! "
                 + "Please also be mindful of the number of shapes you are drawing (e.g. one polyline followed by a circle and two polylines results in three polylines). "
                 + "Do not create incredibly tiny shapes (e.g. avoid skinny rectangles). "
                 + "Ensure proper placement, alignment, and symmetry for all shapes. "
                 + "Avoid randomly generating shapes or modifying existing shapes unless explicitly requested. "
+                + "Any concentric circles should be created in the middle of the canvas. "
+                + "Do not end shapes before starting them. "
                 + "Ensure outputs strictly follow the format, starting with 'Paint Save File Version 1.0' "
                 + "and ending with 'End Paint Save File'.";
-        String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates) will cost lives. "
+        String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates, "
+                + "not putting stuff in the center of the canvas, not ending shapes) will cost lives. "
                 + "Losing all lives ends the process. Follow instructions carefully.";
 
         this.system = warnings + "\n" + format + "\n" + constraints + "\n" + "Example:\n" + example;
@@ -68,36 +73,34 @@ public class OllamaPaint extends Ollama {
     public void newFile1(String outFileName) {
         String example = FileIO.readResourceFile("tangent_circles.txt");
         String prompt = """
-                        Create a grid of circles on a 500x500 canvas. Each circle must:
-                        - Be 50 pixels in diameter (radius = 25).
-                        - Circles must be a random dark color.
-                        - Be tangent to adjacent circles, with no overlap or spacing in between.
-                        - Align in a 10x10 grid, starting at the top-left corner at (25,25).
-                        - At least 20 circles must be drawn (no using shorthand; no being lazy).
-                        - Do not draw extraneous shapes.
-                        - The first circle's center is at (25,25), the second at (75,25), and so on.
-                        - Ensure circles fill the grid while remaining entirely visible within the canvas boundaries.
-                        - Ensure that you aren't adding in-line comments.
-                        - Do not be lazy and give the full output; no brevity.
-                        - Do not give any notes or say what you are doing.
-                        - Create circles ALL THE WAY THROUGH.
-                        - Follow the format exactly (e.g. no using "END" instead of "End").
-                        Here's an example. You may do something similar, exploring colours and fill styles.
-                        Example:
-                        
-                        """ + example;
+                    Create a grid of circles on a 500x500 canvas with the following conditions:
+                    - Each circle has a diameter of 50 pixels (radius = 25).
+                    - Circles must have a random dark color.
+                    - They must be tangent to adjacent circles, with no overlap or spacing.
+                    - Arrange in a 10x10 grid, starting at (25,25).
+                    - Draw at least 20 circles (no shorthand).
+                    - No extraneous shapes.
+                    - The first circle's center is at (25,25), the second at (75,25), etc.
+                    - Ensure circles fill the grid, staying within the canvas boundaries.
+                    - Avoid inline comments.
+                    - Provide the full output without shortening.
+                    - Do not add any notes or explanations.
+                    - Follow the exact format (e.g., use "End", not "END").
+                    Example output:
+                    """ + example;
 
         newFile(prompt, outFileName);
     }
 
 
     /**
-     * newFile2: TODO
+     * newFile2: A two-dimension house with a roof and chimney, perfect for the winter cold! It's also snowing!
      *
      * @param outFileName The name of the new file in the user's home directory
      */
     @Override
     public void newFile2(String outFileName) {
+        String example = FileIO.readResourceFile("funny_house.txt");
         String prompt = """
                         Draw a house on a 500x500 canvas, represented in 3D:
                         - The house base is a rectangle (200x150) centered at (250,300).
@@ -107,7 +110,9 @@ public class OllamaPaint extends Ollama {
                         - Add two windows: each a rectangle (50x50), one on either side of the door.
                         All dimensions and placements must maintain alignment and symmetry.
                         Do not forget to end your shapes that you've begun!
-                        """;
+                        - Please see the example by the following (don't be lazy and give the verbatim format, but unique colours and make shapes aligned):
+                        
+                        """ + example;
                                 newFile(prompt, outFileName);
     }
 
@@ -119,6 +124,8 @@ public class OllamaPaint extends Ollama {
      */
     @Override
     public void newFile3(String outFileName) {
+        String example1 = FileIO.readResourceFile("stickfigure_in_landscape_scenery.txt");
+        String example2 = FileIO.readResourceFile("stickfigure_in_landscape_scenery2.txt");
         String prompt = """
                         Create a landscape drawing with the following elements:
                         - Trees:
@@ -137,7 +144,9 @@ public class OllamaPaint extends Ollama {
                           - Legs: Two diagonal polylines from (250,400) to (230,420) and (250,400) to (270,420).
                         Ensure all elements are proportional and centered, avoiding overlaps.
                         You can only use circles, rectangles, polylines, and squiggles to draw everything.
-                        """;
+                        See the examples:
+                        
+                        """ + example1 + "\n\nAnother example:" + example2;
         newFile(prompt, outFileName);
     }
 
@@ -203,7 +212,7 @@ public class OllamaPaint extends Ollama {
 
         // Ollama may still provide the arithmetic version of points, so it's necessary to capture and replace
         // instances of that with the computed result.
-        Pattern arithmeticPattern = Pattern.compile("-?\\b(-?\\d+)([+-])(\\d+)\\b");
+        Pattern arithmeticPattern = Pattern.compile("\\b(-?\\d+)([+-])(\\d+)\\b");
         processedResult = getStringBuffer(arithmeticPattern, processedResult).toString();
 
         // Ollama may try to provide in-line comments as if this were Java code, so remove those.
