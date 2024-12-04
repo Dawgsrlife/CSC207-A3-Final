@@ -71,7 +71,7 @@ public class OllamaPaint extends Ollama {
     }
 
     /**
-     * newFile1: A bunch of circles tangent to one another, filling up the canvas; truly trypophobia inducing!
+     * newFile1: A bunch of circles tangent to one another; truly trypophobia inducing!
      *
      * @param outFileName The name of the new file in the user's home directory
      */
@@ -92,7 +92,7 @@ public class OllamaPaint extends Ollama {
                     - Provide the full output without shortening.
                     - Do not add any notes or explanations.
                     - Follow the exact format (e.g., use "End", not "END").
-                    Example output:
+                    ALMOST COPY THE Example output BUT MAKE THE CIRCLES COLORFUL:
                     """ + example;
 
         newFile(prompt, outFileName);
@@ -169,12 +169,12 @@ public class OllamaPaint extends Ollama {
     public void modifyFile1(String inFileName, String outFileName) {
         String prompt = """
                         Requirements:
-                        
-                            Randomly choose one quadrant of the canvas.
-                            Add a black rectangle to the chosen quadrant.
-                            Inside the rectangle, write the text "Proudly Created by Ollama :)":
+                            Add a 200 by 100 black rectangle near the bottom right of the canvas.
+                            Inside the rectangle, write the text "Proudly Created by Ollama :)" using Squiggles.
+                            Notice that P is just a vertical line with a rounded part on the right side.
+                            Do similar stuff to create the other letters.
                                 Text should be in white.
-                                Include a light-colored drop shadow using a squiggle effect.
+                                Include a light-colored drop shadow using the squiggle.
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
@@ -190,9 +190,9 @@ public class OllamaPaint extends Ollama {
     public void modifyFile2(String inFileName, String outFileName) {
         String prompt = """
                         Requirements:
-                        
                             Invert the color of each shape (including squiggles):
                                 For each RGB color component (R, G, B), calculate its inverse as (255 - R, 255 - G, 255 - B).
+                                For example, if R = 5, G = 10, B = 15, then the new color should be 250,245,240.
                                 Apply the inversion to the fill color and stroke color of all shapes.
                         """;
         modifyFile(prompt, inFileName, outFileName);
@@ -209,7 +209,6 @@ public class OllamaPaint extends Ollama {
     public void modifyFile3(String inFileName, String outFileName) {
         String prompt = """
                         Requirements:
-                        
                             All shapes that are not squiggles should be converted into squiggles.
                                 Rectangles and circles: Approximate their boundaries using many points.
                                     For filled shapes, use additional interior points to mimic the filled area.
@@ -224,12 +223,16 @@ public class OllamaPaint extends Ollama {
         // Remove possible quotation marks (") and periods (.):
         String processedResult = result.replaceAll("[\".*]", "");
 
-        // Ollama may try to add redundant information that surrounds the relevant Paint Save File Format.
+        // Ollama may try to use triple grave symbols to begin and end code. Run through the result and snip that out if any!
+        processedResult = extractContentBetweenTripleGraves(processedResult);
+
+        // If there were no triple graves, Ollama may try to add redundant information that surrounds the relevant Paint Save File Format.
         // This excess information can be removed by regex matching, and then restoring the start and end of the
         // file format.
         String startOrEndRegex = "(?s)^.*?Paint Save File Version (1\\.0|10)|End Paint Save File.*$";
         processedResult = processedResult.replaceAll(startOrEndRegex, "");
         processedResult = "Paint Save File Version 1.0\n" + processedResult + "\nEnd Paint Save File\n";
+
 
         // Ollama may still provide the arithmetic version of points, so it's necessary to capture and replace
         // instances of that with the computed result.
@@ -241,6 +244,23 @@ public class OllamaPaint extends Ollama {
 
         // Return the result:
         return processedResult.trim();
+    }
+
+    public static String extractContentBetweenTripleGraves(String input) {
+        int firstIndex = input.indexOf("```");
+        if (firstIndex == -1) {
+            // Means no triple graves found.
+            return input;
+        }
+
+        int secondIndex = input.indexOf("```", firstIndex + 3);
+        if (secondIndex == -1) {
+            // Only one set of triple graves found.
+            return input.substring(firstIndex + 3);
+        }
+
+        // Extract content between the first and second triple graves
+        return input.substring(firstIndex + 3, secondIndex).trim();
     }
 
     private static StringBuffer getStringBuffer(Pattern arithmeticPattern, String processedResult) {
