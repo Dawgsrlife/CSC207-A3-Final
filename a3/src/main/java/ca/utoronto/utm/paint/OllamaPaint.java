@@ -36,7 +36,10 @@ public class OllamaPaint extends Ollama {
                 + "Ensure outputs strictly follow the format, starting with 'Paint Save File Version 1.0' "
                 + "and ending with 'End Paint Save File'. It is also vital that you end circle, polyline, rectangle, or squiggle, if you started them and they're not yet ended. "
                 + "Do not add any notes before or after the file. You are tasked with writing me output that CAN BE PARSED IMMEDIATELY, "
-                + "as if it is funneled directly into a paint program. There is no character limit. ";
+                + "as if it is funneled directly into a paint program. There is no character limit. "
+                + "If you are asked to replace circles with rectangles, then the rectangle should have the same size as the radius of the circle. "
+                + "Keep the positions of the shapes the same. "
+                + "Do not add random comments describing what you are doing in the file. The goal is to create a file that remains parsable by following the format.";
         String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates, "
                 + "not putting stuff in the center of the canvas, not ending shapes) will cost lives. "
                 + "Losing all lives ends the process. Follow instructions carefully.";
@@ -119,10 +122,11 @@ public class OllamaPaint extends Ollama {
                         - Add two windows: each a rectangle (50x50), one on either side of the door.
                         All dimensions and placements must maintain alignment and symmetry.
                         Do not forget to end your shapes that you've begun!
+                        - Rectangles have 2 points max. If you need to draw a triangle then use polyline.
                         - Please see the example by the following (don't be lazy and give the verbatim format, but unique colours and make shapes aligned):
                         See the examples:
                         
-                        """;
+                        """ + example1 + "\n\nAnother Example:" + example2;
         newFile(prompt, outFileName);
     }
 
@@ -193,6 +197,7 @@ public class OllamaPaint extends Ollama {
                             For every shape, change its color to its inverse.
                             To calculate this change, take the RGB values and subtract them from 255 to obtain the new value.
                             For example, if you have "color:255,255,0", then you should do 255-255, 255-255, and 255-0 to obtain "color:0,0,255" as the new color.
+                            Color values must not be negative.
                             Write that in your output then.
                         """;
         modifyFile(prompt, inFileName, outFileName);
