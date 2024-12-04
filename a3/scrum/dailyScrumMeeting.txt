@@ -93,7 +93,7 @@ Dec 2, 2024
 
 Dec 3, 2024
 	Yesterday : Understand and work with Ollama. Achieve correct formatting and create post-processing for Ollama generations.
-	Today     : Complete US3.6, added with interesting image generation and modifications.
+	Today     : Complete US3.6, added with interesting image generation and modifications. Complete A3.
 	Obstacles : Ollama struggles to create complex images. Ollama has poor comprehension and is unable to execute instructions accurately.
 
 Dec 4, 2024
