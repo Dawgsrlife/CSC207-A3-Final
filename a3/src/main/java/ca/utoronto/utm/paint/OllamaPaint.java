@@ -97,6 +97,7 @@ public class OllamaPaint extends Ollama {
                     - Provide the full output without shortening.
                     - Do not add any notes or explanations.
                     - Follow the exact format (e.g., use "End", not "END").
+                    Not following the examples and using brevity will cause you to lose all your lives.
                     ALMOST COPY THE Example output BUT MAKE THE CIRCLES COLORFUL:
                     """ + example;
 
@@ -124,6 +125,7 @@ public class OllamaPaint extends Ollama {
                         Do not forget to end your shapes that you've begun!
                         - Rectangles have 2 points max. If you need to draw a triangle then use polyline.
                         - Please see the example by the following (don't be lazy and give the verbatim format, but unique colours and make shapes aligned):
+                        Not following the examples and using brevity will cause you to lose all your lives.
                         See the examples:
                         
                         """ + example1 + "\n\nAnother Example:" + example2;
@@ -132,7 +134,7 @@ public class OllamaPaint extends Ollama {
 
 
     /**
-     * newFile3: TODO
+     * newFile3: A drawing with a stick figure, a sun, some birds in the sky, and trees!
      *
      * @param outFileName The name of the new file in the user's home directory
      */
@@ -205,7 +207,7 @@ public class OllamaPaint extends Ollama {
 
 
     /**
-     * modifyFile3: Change everything to be super tiny.
+     * modifyFile3: Change everything to be all black.
      *
      * @param inFileName  The source Paint file to be modified
      * @param outFileName The name of the new file in the user's home directory
@@ -213,7 +215,8 @@ public class OllamaPaint extends Ollama {
     @Override
     public void modifyFile3(String inFileName, String outFileName) {
         String prompt = """
-                        Scale all the shapes to be very small. Just follow the format.
+                        Just change the colors of all shapes to be black. You should know how it's done!
+                        Not following the examples and using brevity will cause you to lose all your lives.
                         """;
         modifyFile(prompt, inFileName, outFileName);
     }
