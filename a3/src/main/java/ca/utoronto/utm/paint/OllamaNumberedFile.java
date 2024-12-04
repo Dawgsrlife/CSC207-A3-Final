@@ -59,7 +59,7 @@ public class OllamaNumberedFile extends Ollama {
     }
 
     public static void main(String[] args) {
-        OllamaNumberedFile op = new OllamaNumberedFile("dh2010pcXX.utm.utoronto.ca"); // replace with one of your servers
+        OllamaNumberedFile op = new OllamaNumberedFile("dh2010pc42.utm.utoronto.ca"); // replace with one of your servers
         op.newFile("Create a new Numbered File with 15 lines. The content of the lines should come from lines of The Canadian Charter of rights.", "numberedFileExample1.txt");
         op.modifyFile("Add a few more Numbered Lines to the given numbered file, the new lines should come from the US Constitution ", "numberedFileExample1.txt", "numberedFileExample2.txt");
     }

@@ -129,11 +129,28 @@ public class View implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         System.out.println(((MenuItem) event.getSource()).getText());
         String command = ((MenuItem) event.getSource()).getText();
+
+        // Set the default initial directory to the user's home folder:
+        File homeFolder;
+        // For some reason if <user.home> is not correctly set or misconfigured, or if the OS has no home directory:
+        try {
+            homeFolder = new File(System.getProperty("user.home"));
+            if (!homeFolder.exists() || !homeFolder.isDirectory()) {
+                throw new Exception("Home directory not valid.");
+            }
+        } catch (Exception e) {
+            // Fallback to the root directory as a last resort:
+            homeFolder = new File(File.separator);
+            System.out.println("Failed to find home directory, falling back to root directory.");
+        }
+
         if (command.equals("Open")) {
             FileChooser fc = new FileChooser();
 
             // Set the title and file extension type:
             fc.setTitle("Open Paint File");
+            fc.setInitialDirectory(homeFolder);
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
             File file = fc.showOpenDialog(this.stage);
@@ -161,6 +178,8 @@ public class View implements EventHandler<ActionEvent> {
 
             // Set the title and file extension type:
             fc.setTitle("Save Paint File");
+            fc.setInitialDirectory(homeFolder);
+            fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Documents (*.txt)", "*.txt"));
             fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Paint Save File Format Files (*.pssf)", "*.pssf"));
 
             File file = fc.showSaveDialog(this.stage);
