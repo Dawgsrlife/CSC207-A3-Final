@@ -28,6 +28,8 @@ public class OllamaPaint extends Ollama {
                 + "Avoid randomly generating shapes or modifying existing shapes unless explicitly requested. "
                 + "Any concentric circles should be created in the middle of the canvas. "
                 + "Do not end shapes before starting them. "
+                + "Be very careful to avoid mistakes with the format. Take your time in generation. "
+                + "Do not accidentally put brackets where they don't belong (e.g. \"(point:(349,25)\" should just be \"point:(349,25)\"). "
                 + "Ensure outputs strictly follow the format, starting with 'Paint Save File Version 1.0' "
                 + "and ending with 'End Paint Save File'.";
         String warnings = "You have limited 'lives.' Each mistake (e.g., misaligned shapes, incorrect coordinates, "
@@ -100,7 +102,8 @@ public class OllamaPaint extends Ollama {
      */
     @Override
     public void newFile2(String outFileName) {
-        String example = FileIO.readResourceFile("funny_house.txt");
+        String example1 = FileIO.readResourceFile("funny_house.txt");
+        String example2 = FileIO.readResourceFile("funny_house2.txt");
         String prompt = """
                         Draw a house on a 500x500 canvas, represented in 3D:
                         - The house base is a rectangle (200x150) centered at (250,300).
@@ -111,9 +114,9 @@ public class OllamaPaint extends Ollama {
                         All dimensions and placements must maintain alignment and symmetry.
                         Do not forget to end your shapes that you've begun!
                         - Please see the example by the following (don't be lazy and give the verbatim format, but unique colours and make shapes aligned):
+                        See the examples:
                         
-                        """ + example;
-                                newFile(prompt, outFileName);
+                        """ + example1 + "\n\nAnother example:" + example2;
     }
 
 
