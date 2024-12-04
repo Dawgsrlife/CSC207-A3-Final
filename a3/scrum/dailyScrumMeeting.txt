@@ -87,14 +87,14 @@ Dec 1, 2024
 	Obstacles : Understanding that commands can be built and then added to a temporary model, which can be used or discarded.
 	
 Dec 2, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Add and complete BUG3.21 and BUG3.22; complete US3.3. Begin working on Part 2 of assignment.
+	Today     : Understand and work with Ollama. Achieve correct formatting and create post-processing for Ollama generations.
+	Obstacles : Ollama has poor comprehension and is unable to execute instructions accurately.
 
 Dec 3, 2024
-	Yesterday :
-	Today     :
-	Obstacles :
+	Yesterday : Understand and work with Ollama. Achieve correct formatting and create post-processing for Ollama generations.
+	Today     : Complete US3.6, added with interesting image generation and modifications.
+	Obstacles : Ollama struggles to create complex images. Ollama has poor comprehension and is unable to execute instructions accurately.
 
 Dec 4, 2024
 	Yesterday :
